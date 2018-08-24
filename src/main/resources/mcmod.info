@@ -1,0 +1,16 @@
+[
+{
+  "modid": "upgraderecipes",
+  "name": "Armor & Tool Upgrading",
+  "description": "A Mod that change some Recipes...",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ToMe25"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
