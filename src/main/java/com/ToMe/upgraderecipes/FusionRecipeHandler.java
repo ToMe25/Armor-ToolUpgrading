@@ -6,6 +6,7 @@ import java.util.List;
 import com.brandon3055.draconicevolution.api.fusioncrafting.FusionRecipeAPI;
 import com.brandon3055.draconicevolution.api.fusioncrafting.IFusionRecipe;
 import com.brandon3055.draconicevolution.api.fusioncrafting.SimpleFusionRecipe;
+import com.brandon3055.draconicevolution.lib.ToolUpgradeRecipe;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ public class FusionRecipeHandler {
 	public static void removeFusionRecipe(ItemStack result, boolean useDamage) {
 		List<IFusionRecipe> recipes = FusionRecipeAPI.getRecipes();
 		for(IFusionRecipe recipe:recipes) {
+			//UpgradeRecipesMod.log.info(recipe.getClass().toString());
 			if(recipe.getRecipeOutput(null) != null) {
 				Item outItem = recipe.getRecipeOutput(null).getItem();
 				Item inItem = result.getItem();
@@ -86,7 +88,8 @@ public class FusionRecipeHandler {
 				ItemStack awakened_energy_core = new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("draconicevolution:draconic_energy_core")));
 				ResourceLocation item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
 				if(Item.REGISTRY.containsKey(item)) {
-					FusionRecipeAPI.registry.add(new SimpleFusionRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new ItemStack(Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))), 16000, 2, new Object[] {
+					//FusionRecipeAPI.registry.add(new SimpleFusionRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new ItemStack(Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))), 16000, 2, new Object[] {
+					FusionRecipeAPI.registry.add(new ToolUpgradeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new ItemStack(Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))), 16000, 2, new Object[] {
 						awakened_core, Mat, awakened_energy_core, Mat
 					}));
 					if(Config.debug) {
@@ -118,7 +121,8 @@ public class FusionRecipeHandler {
 				ItemStack awakened_energy_core = new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("draconicevolution:draconic_energy_core")));
 				ResourceLocation item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
 				if(Item.REGISTRY.containsKey(item)) {
-					FusionRecipeAPI.registry.add(new SimpleFusionRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new ItemStack(Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))), 320000, 2, new Object[] {
+					//FusionRecipeAPI.registry.add(new SimpleFusionRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new ItemStack(Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))), 320000, 2, new Object[] {
+					FusionRecipeAPI.registry.add(new ToolUpgradeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new ItemStack(Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))), 320000, 2, new Object[] {
 						Mat, awakened_core, Mat, awakened_energy_core
 					}));
 					if(Config.debug) {

@@ -245,9 +245,9 @@ public class Config {
 	
 	public static final String CATEGORY_WEAPONS = "weapons_support";
 	public static boolean redcrystal = true;
-	//public static boolean redcrystal_blocks = false;
-	/**USELESS Because RedCrystal has no different block variant.*/
-	public static final boolean redcrystal_blocks = false;
+	public static boolean redcrystal_blocks = false;
+	///**USELESS Because RedCrystal has no different block variant.*/
+	//public static final boolean redcrystal_blocks = false;
 	public static boolean redcrystal_pickaxe = true;
 	public static boolean redcrystal_axe = true;
 	public static boolean redcrystal_shovel = true;
@@ -488,6 +488,7 @@ public class Config {
 		
 		config.addCustomCategoryComment(CATEGORY_WEAPONS, "Enable / Disable any Part of the New Weapons Mod Integration.");
 		redcrystal = config.getBoolean("redcrystal_0_enable", CATEGORY_WEAPONS, redcrystal, "Enables / Disables Recipe Changes for RedCrystal Tools and Armor.");
+		redcrystal_blocks = config.getBoolean("redcrystal_1_blocks", CATEGORY_VANILLA, redcrystal_blocks, "Enables / Disables the use of Blocks to Nerf RedCrystal Recipes.");
 		redcrystal_pickaxe = config.getBoolean("redcrystal_pickaxe", CATEGORY_WEAPONS, redcrystal_pickaxe, "Enables / Disables Recipe Changes for the RedCrystal Pickaxe.");
 		redcrystal_axe = config.getBoolean("redcrystal_axe", CATEGORY_WEAPONS, redcrystal_axe, "Enables / Disables Recipe Changes for the RedCrystal Axe.");
 		redcrystal_shovel = config.getBoolean("redcrystal_shovel", CATEGORY_WEAPONS, redcrystal_shovel, "Enables / Disables Recipe Changes for the RedCrystal Shovel.");
