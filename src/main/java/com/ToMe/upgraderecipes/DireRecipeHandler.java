@@ -688,7 +688,7 @@ public class DireRecipeHandler {
 	 */
 	private static void addExtremeShapedOreRecipe(ItemStack result, Object[] recipe) {
 		try {
-			//Class<?> extremeCraftingManager = Class.forName("morph.avaritia.recipe.extreme.ExtremeCraftingManager");
+			Class<?> extremeCraftingManager = Class.forName("morph.avaritia.recipe.extreme.ExtremeCraftingManager");
 			Class<?> avaritiaRecipeManager = Class.forName("morph.avaritia.recipe.AvaritiaRecipeManager");
 			Class<?> extremeShapedRecipe = Class.forName("morph.avaritia.recipe.extreme.ExtremeShapedRecipe");
 			//Method getInstance = extremeCraftingManager.getDeclaredMethod("getInstance", new Class<?>[] {});
@@ -698,7 +698,12 @@ public class DireRecipeHandler {
 			Field extremeRecipes = avaritiaRecipeManager.getDeclaredField("EXTREME_RECIPES");
 			Map<ResourceLocation, Object> EXTREME_RECIPES = (Map<ResourceLocation, Object>) extremeRecipes.get(null);
 			Object extremeRecipe = newExtremeShapedRecipe.newInstance(result, CraftingHelper.parseShaped(recipe));
-			EXTREME_RECIPES.put(new ResourceLocation(UpgradeRecipesMod.MODID + ":" + result.getDisplayName()), extremeRecipe);
+			ResourceLocation recipeName = new ResourceLocation(UpgradeRecipesMod.MODID + ":" + result.getDisplayName());
+			//EXTREME_RECIPES.put(new ResourceLocation(UpgradeRecipesMod.MODID + ":" + result.getDisplayName()), extremeRecipe);
+			EXTREME_RECIPES.put(recipeName, extremeRecipe);
+			Field REGISTRY = extremeCraftingManager.getDeclaredField("REGISTRY");
+			RegistryNamespaced ExtremeRegistry = (RegistryNamespaced) REGISTRY.get(null);
+			ExtremeRegistry.putObject(recipeName, extremeRecipe);
 			if(Config.debug) {
 				UpgradeRecipesMod.log.info("Added Dire Recipe for " + result.getDisplayName() + "!");
 			}
