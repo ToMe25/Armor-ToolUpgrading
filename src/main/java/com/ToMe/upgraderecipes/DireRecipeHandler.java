@@ -709,7 +709,24 @@ public class DireRecipeHandler {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			UpgradeRecipesMod.log.catching(e);
+			//UpgradeRecipesMod.log.catching(e);
+			try {
+				Class<?> avaritiaRecipeManager = Class.forName("morph.avaritia.recipe.AvaritiaRecipeManager");
+				Class<?> extremeShapedRecipe = Class.forName("morph.avaritia.recipe.extreme.ExtremeShapedRecipe");
+				Constructor<?> newExtremeShapedRecipe = extremeShapedRecipe.getConstructor(ItemStack.class, ShapedPrimer.class);
+				Field extremeRecipes = avaritiaRecipeManager.getDeclaredField("EXTREME_RECIPES");
+				Map<ResourceLocation, Object> EXTREME_RECIPES = (Map<ResourceLocation, Object>) extremeRecipes.get(null);
+				Object extremeRecipe = newExtremeShapedRecipe.newInstance(result, CraftingHelper.parseShaped(recipe));
+				ResourceLocation recipeName = new ResourceLocation(UpgradeRecipesMod.MODID + ":" + result.getDisplayName());
+				EXTREME_RECIPES.put(recipeName, extremeRecipe);
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Dire Recipe for " + result.getDisplayName() + "!");
+				}
+			} catch (Exception e1) {
+				// TODO: handle exception
+				UpgradeRecipesMod.log.catching(e);
+				UpgradeRecipesMod.log.catching(e1);
+			}
 		}
 	}
 	
