@@ -5,30 +5,100 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
+import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.GuiCustomModLoadingErrorScreen;
 import net.minecraftforge.fml.client.SplashProgress;
 import net.minecraftforge.fml.common.MissingModsException;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.versioning.ArtifactVersion;
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
 
 public class UpgradeRecipesClientProxy extends UpgradeRecipesCommonProxy {
 	
-	@Override
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent e) {
+	//@Override
+	//@EventHandler
+	//public void preInit(FMLPreInitializationEvent e) {
 		// TODO Auto-generated method stub
-		super.preInit(e);
+		//super.preInit(e);
 		//throwModsMissingException("Test", "trigems");
-	}
+	//}
+	
+	//@Override
+	//public void Init(FMLInitializationEvent e) {
+		//super.Init(e);
+		//if(Config.lapisDust) {
+			//LapisDust.RegisterTextur();
+			//if(LapisDust != null) {
+				//LapisDust.RegisterTextur();
+			//}
+		//}
+		//LapisDust.RegisterTextur();
+		//RefinedLapisIngot.RegisterTextur();
+		//if(Config.refinedLapis) {
+			//RefinedLapisIngot.RegisterTextur();
+			//if(RefinedLapisIngot != null) {
+				//RefinedLapisIngot.RegisterTextur();
+			//}
+			//if(RefinedLapisBlock != null) {
+				//RefinedLapisBlock.RegisterTextur();
+			//}
+		//}
+		//NetherStarBlock.RegisterTextur();
+		//if(Config.netherStarBlock) {
+			//if(NetherStarBlock != null) {
+				//NetherStarBlock.RegisterTextur();
+			//}
+		//}
+		//if(Config.dummyItems) {
+			//for(ModItem item:dummyItems) {
+				//item.RegisterTextur();
+			//}
+		//}
+	//}
 	
 	//@Override
 	//public void throwModsMissingException() {
 		// TODO Auto-generated method stub
 		//throw new ModsMissingException();
 	//}
+	
+	@Override
+	public void registerItems(Register<Item> e) {
+		super.registerItems(e);
+		//RefinedLapisIngot.RegisterTextur();
+		if(Config.lapisDust) {
+			if(LapisDust != null) {
+				LapisDust.RegisterTextur();
+			}
+		}
+		if(Config.refinedLapis) {
+			if(RefinedLapisIngot != null) {
+				RefinedLapisIngot.RegisterTextur();
+			}
+			if(RefinedLapisBlock != null) {
+				RefinedLapisBlock.RegisterTextur();
+			}
+		}
+		if(Config.netherStarBlock) {
+			if(NetherStarBlock != null) {
+				NetherStarBlock.RegisterTextur();
+			}
+		}
+	}
+	
+	@Override
+	public void addDummyItems() {
+		super.addDummyItems();
+		if(Config.dummyItems) {
+			for(ModItem item:dummyItems) {
+				item.RegisterTextur();
+			}
+		}
+	}
 	
 	/**
 	 * on Server side: Throws a new MissingModsException.
@@ -53,7 +123,10 @@ public class UpgradeRecipesClientProxy extends UpgradeRecipesCommonProxy {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			UpgradeRecipesMod.log.catching(e);
+			//UpgradeRecipesMod.log.catching(e);
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
 		}
 		//FMLClientHandler.instance().customError = new ModsMissingException(cause, mods);
 		//FMLClientHandler.instance().getClient().displayGuiScreen(new GuiModsMissing(new ModsMissingException(cause, mods)));	
@@ -78,7 +151,10 @@ public class UpgradeRecipesClientProxy extends UpgradeRecipesCommonProxy {
 			f.set(FMLClientHandler.instance(), new ConfigLoadingException(cause));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			UpgradeRecipesMod.log.catching(e);
+			//UpgradeRecipesMod.log.catching(e);
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
 		}
 	}
 	

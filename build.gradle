@@ -11,9 +11,9 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0"
+version = "$version"
 group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+archivesBaseName = "Armor&ToolUpgradingMC$minecraft_version"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -54,11 +54,17 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    
     provided ("com.brandon3055.draconicevolution:Draconic-Evolution:${minecraft_version}-${draconic_evolution_version}:deobf") {
         //exclude module: "jei_${minecraft_version}"
         //exclude module: "jei_1.12"
         exclude module: "OpenComputers"
+        //exclude module: "CodeChickenLib"
     }
+    
+    //provided "mekanism:Mekanism-$minecraft_version:$mekanism_version:api"
+    
+    //provided "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:deobf";
     
     //deobfCompile ("com.brandon3055.draconicevolution:Draconic-Evolution:${minecraft_version}-${draconic_evolution_version}:deobf") {
         //exclude module: "OpenComputers"
@@ -68,7 +74,7 @@ dependencies {
 
 repositories {
     maven {
-        name "ChickenBone's & CCL & BC & DE"
+        name "ChickenBone's & DE"
         url "http://chickenbones.net/maven"
     }
     maven {
@@ -79,9 +85,14 @@ repositories {
         name = "Cover's & RedstoneFlux"
         url = "http://maven.covers1624.net"
     }
+    //maven {
+        //name "Curseforge Maven"
+        //url "https://minecraft.curseforge.com/api/maven"
+    //}
 }
 
-processResources {
+processResources
+{
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
