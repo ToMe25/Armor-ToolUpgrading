@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "upgraderecipes:netherstarblock"
+    }
+  ],
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "netherStar",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "upgraderecipes:netherstarblock",
+    "data": 0,
+    "count": 1
+  }
+}
