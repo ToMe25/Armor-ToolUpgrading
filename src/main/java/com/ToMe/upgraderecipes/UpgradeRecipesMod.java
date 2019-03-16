@@ -1,34 +1,37 @@
 package com.ToMe.upgraderecipes;
 
-import java.util.HashSet;
-import java.util.Set;
+//import java.util.HashSet;
+//import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.Item;
+//import net.minecraft.item.crafting.IRecipe;
+//import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.MissingModsException;
+//import net.minecraftforge.fml.common.Loader;
+//import net.minecraftforge.fml.common.MissingModsException;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.ModClassLoader;
+//import net.minecraftforge.fml.common.ModClassLoader;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+//import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLLoadEvent;
+//import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+//import net.minecraftforge.fml.common.event.FMLLoadEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLStateEvent;
+//import net.minecraftforge.fml.common.event.FMLStateEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.functions.ArtifactVersionNameFunction;
-import net.minecraftforge.fml.common.versioning.ArtifactVersion;
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
-import net.minecraftforge.fml.client.GuiModsMissing;
+//import net.minecraftforge.fml.common.functions.ArtifactVersionNameFunction;
+//import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+//import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
+//import net.minecraftforge.fml.relauncher.Side;
+//import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
+//import net.minecraftforge.fml.client.GuiModsMissing;
 
 @EventBusSubscriber
 @Mod(modid = UpgradeRecipesMod.MODID, name = UpgradeRecipesMod.NAME, version = UpgradeRecipesMod.VERSION, acceptedMinecraftVersions = UpgradeRecipesMod.MCVERSION, dependencies = UpgradeRecipesMod.DEPENDENCIES)
@@ -40,6 +43,12 @@ public class UpgradeRecipesMod {
 	public static final String MCVERSION = "[1.10,1.10.2]";
 	public static final String DEPENDENCIES = "after:avaritia;" +
 											  "after:draconicevolution;" +
+											  "after:Mekanism;" +//WHY MEKANISM???
+											  "after:mekanism;" +
+											  "after:MekanismTools;" +//WHY MEKANISM???
+											  "after:mekanismtools;" +
+											  "after:mo;" +
+											  "after:matteroverdrive;" +
 											  "after:weapons;" +
 											  "after:rubymod;" +
 											  "after:stars;" +
@@ -87,6 +96,7 @@ public class UpgradeRecipesMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		//MinecraftForge.EVENT_BUS.register(this);
 		proxy.preInit(e);
 		//throw new CustomModLoadingErrorDisplayException();
 		//if(!Loader.isModLoaded("trigems") && !Loader.isModLoaded("rubymod")) {
@@ -104,17 +114,26 @@ public class UpgradeRecipesMod {
 	@EventHandler
 	public void Init(FMLInitializationEvent e) {
 		//proxy.throwModsMissingException("Missed", "trigems");
+		proxy.Init(e);
+		//RecipeAdd.addRecipes();
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
-		RecipeRemove.removeRecipes();
-		RecipeAdd.addRecipes();
+		//RecipeAdd.addRecipes();
+		//RecipeRemove.removeRecipes();
+		//RecipeAdd.addRecipes();
 	}
 	
 	//@SubscribeEvent
 	//public static void onRecipeRegistered(RegistryEvent.Register<IRecipe> e) {
 		
 	//}
+	
+	//@SubscribeEvent
+	@SubscribeEvent(priority=EventPriority.LOW)
+	public static void registerItems(RegistryEvent.Register<Item> e) {
+		proxy.registerItems(e);
+	}
 	
 }

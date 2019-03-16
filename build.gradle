@@ -11,9 +11,9 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.0"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+version = "$version"
+group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Armor&ToolUpgradingMC$minecraft_version"
 
 sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
 compileJava {
@@ -59,7 +59,12 @@ dependencies {
         //exclude module: "jei_${minecraft_version}"
         //exclude module: "jei_1.12"
         exclude module: "OpenComputers"
+        //exclude module: "CodeChickenLib"
     }
+    
+    //provided "mekanism:Mekanism-$minecraft_version:$mekanism_version:api"
+    
+    //provided "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:deobf";
     
     //deobfCompile ("com.brandon3055.draconicevolution:Draconic-Evolution:${minecraft_version}-${draconic_evolution_version}:deobf") {
         //exclude module: "OpenComputers"
@@ -76,6 +81,10 @@ repositories {
         name = "Progwml6 & JEI"
         url = "http://dvs1.progwml6.com/files/maven"
     }
+    //maven {
+        //name "Curseforge Maven"
+        //url "https://minecraft.curseforge.com/api/maven"
+    //}
 }
 
 processResources
