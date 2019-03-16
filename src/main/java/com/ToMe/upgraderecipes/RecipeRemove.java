@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 
 public class RecipeRemove {
 	
@@ -19,36 +20,45 @@ public class RecipeRemove {
 	 * Removes the Recipes for all Items that should get a new Recipe.
 	 */
 	public static void removeRecipes() {
-		if(Config.tools) {
-			for(String s:UpgradeRecipesCommonProxy.toChange) {
-				if(UpgradeRecipesCommonProxy.ToolMap.containsKey(s + ":pickaxe") || UpgradeRecipesCommonProxy.ToolMap.containsKey(s + ":sword") || UpgradeRecipesCommonProxy.ToolMap.containsKey(s + ":bow")) {
-					if(!UpgradeRecipesCommonProxy.customCrafting.containsKey(s) || UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("crafting")) {
-						removeToolOrArmorRecipe(s, "pickaxe");
-						removeToolOrArmorRecipe(s, "axe");
-						removeToolOrArmorRecipe(s, "shovel");
-						removeToolOrArmorRecipe(s, "hoe");
-						removeToolOrArmorRecipe(s, "sword");
-						removeToolOrArmorRecipe(s, "bow");
-					}
-					if(UpgradeRecipesCommonProxy.customCrafting.containsKey(s)) {
-						if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("fusion")) {
-							removeToolOrArmorFusionRecipe(s, "pickaxe");
-							removeToolOrArmorFusionRecipe(s, "axe");
-							removeToolOrArmorFusionRecipe(s, "shovel");
-							removeToolOrArmorFusionRecipe(s, "sword");
-							removeToolOrArmorFusionRecipe(s, "hoe");
-							removeToolOrArmorFusionRecipe(s, "bow");
-						}
-						else if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("dire")) {
-							removeToolOrArmorDireRecipe(s, "pickaxe");
-							removeToolOrArmorDireRecipe(s, "axe");
-							removeToolOrArmorDireRecipe(s, "shovel");
-							removeToolOrArmorDireRecipe(s, "hoe");
-							removeToolOrArmorDireRecipe(s, "sword");
-							removeToolOrArmorDireRecipe(s, "bow");
-						}
-					}
-				}
+		for(Materials mat:Materials.values()) {
+			//mat.removeRecipes();
+			//if(Loader.isModLoaded(mat.getMod())) {
+			//if(Loader.isModLoaded(mat.getMod()) || Loader.isModLoaded(mat.getMod().toLowerCase())) {
+			//if(UpgradeRecipesCommonProxy.isModLoaded(mat.getMod())) {
+			if(mat.isModLoaded()) {
+				mat.removeRecipes();
+			}
+		}
+		//if(Config.tools) {
+			//for(String s:UpgradeRecipesCommonProxy.toChange) {
+				//if(UpgradeRecipesCommonProxy.ToolMap.containsKey(s + ":pickaxe") || UpgradeRecipesCommonProxy.ToolMap.containsKey(s + ":sword") || UpgradeRecipesCommonProxy.ToolMap.containsKey(s + ":bow")) {
+					//if(!UpgradeRecipesCommonProxy.customCrafting.containsKey(s) || UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("crafting")) {
+						//removeToolOrArmorRecipe(s, "pickaxe");
+						//removeToolOrArmorRecipe(s, "axe");
+						//removeToolOrArmorRecipe(s, "shovel");
+						//removeToolOrArmorRecipe(s, "hoe");
+						//removeToolOrArmorRecipe(s, "sword");
+						//removeToolOrArmorRecipe(s, "bow");
+					//}
+					//if(UpgradeRecipesCommonProxy.customCrafting.containsKey(s)) {
+						//if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("fusion")) {
+							//removeToolOrArmorFusionRecipe(s, "pickaxe");
+							//removeToolOrArmorFusionRecipe(s, "axe");
+							//removeToolOrArmorFusionRecipe(s, "shovel");
+							//removeToolOrArmorFusionRecipe(s, "sword");
+							//removeToolOrArmorFusionRecipe(s, "hoe");
+							//removeToolOrArmorFusionRecipe(s, "bow");
+						//}
+						//else if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("dire")) {
+							//removeToolOrArmorDireRecipe(s, "pickaxe");
+							//removeToolOrArmorDireRecipe(s, "axe");
+							//removeToolOrArmorDireRecipe(s, "shovel");
+							//removeToolOrArmorDireRecipe(s, "hoe");
+							//removeToolOrArmorDireRecipe(s, "sword");
+							//removeToolOrArmorDireRecipe(s, "bow");
+						//}
+					//}
+				//}
 				//if(!UpgradeRecipesCommonProxy.customCrafting.containsKey(s) || UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("crafting")) {
 					//removeToolOrArmorRecipe(s, "sword");
 					//removeToolOrArmorRecipe(s, "pickaxe");
@@ -83,32 +93,32 @@ public class RecipeRemove {
 						//removeToolOrArmorDireRecipe(s, "bow");
 					//}
 				//}
-			}
-		}
-		if(Config.armor) {
-			for(String s:UpgradeRecipesCommonProxy.toChange) {
-				if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(s + ":helmet")) {
-					if(!UpgradeRecipesCommonProxy.customCrafting.containsKey(s) || UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("crafting")) {
-						removeToolOrArmorRecipe(s, "helmet");
-						removeToolOrArmorRecipe(s, "chestplate");
-						removeToolOrArmorRecipe(s, "leggings");
-						removeToolOrArmorRecipe(s, "boots");
-					}
-					if(UpgradeRecipesCommonProxy.customCrafting.containsKey(s)) {
-						if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("fusion")) {
-							removeToolOrArmorFusionRecipe(s, "helmet");
-							removeToolOrArmorFusionRecipe(s, "chestplate");
-							removeToolOrArmorFusionRecipe(s, "leggings");
-							removeToolOrArmorFusionRecipe(s, "boots");
-						}
-						else if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("dire")) {
-							removeToolOrArmorDireRecipe(s, "helmet");
-							removeToolOrArmorDireRecipe(s, "chestplate");
-							removeToolOrArmorDireRecipe(s, "leggings");
-							removeToolOrArmorDireRecipe(s, "boots");
-						}
-					}
-				}
+			//}
+		//}
+		//if(Config.armor) {
+			//for(String s:UpgradeRecipesCommonProxy.toChange) {
+				//if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(s + ":helmet")) {
+					//if(!UpgradeRecipesCommonProxy.customCrafting.containsKey(s) || UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("crafting")) {
+						//removeToolOrArmorRecipe(s, "helmet");
+						//removeToolOrArmorRecipe(s, "chestplate");
+						//removeToolOrArmorRecipe(s, "leggings");
+						//removeToolOrArmorRecipe(s, "boots");
+					//}
+					//if(UpgradeRecipesCommonProxy.customCrafting.containsKey(s)) {
+						//if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("fusion")) {
+							//removeToolOrArmorFusionRecipe(s, "helmet");
+							//removeToolOrArmorFusionRecipe(s, "chestplate");
+							//removeToolOrArmorFusionRecipe(s, "leggings");
+							//removeToolOrArmorFusionRecipe(s, "boots");
+						//}
+						//else if(UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("dire")) {
+							//removeToolOrArmorDireRecipe(s, "helmet");
+							//removeToolOrArmorDireRecipe(s, "chestplate");
+							//removeToolOrArmorDireRecipe(s, "leggings");
+							//removeToolOrArmorDireRecipe(s, "boots");
+						//}
+					//}
+				//}
 				//if(!UpgradeRecipesCommonProxy.customCrafting.containsKey(s) || UpgradeRecipesCommonProxy.customCrafting.get(s).equalsIgnoreCase("crafting")) {
 					//removeToolOrArmorRecipe(s, "helmet");
 					//removeToolOrArmorRecipe(s, "chestplate");
@@ -123,8 +133,8 @@ public class RecipeRemove {
 						//removeToolOrArmorFusionRecipe(s, "boots");
 					//}
 				//}
-			}
-		}
+			//}
+		//}
 		/**if(Config.avaritia) {
 			
 		}
@@ -197,15 +207,18 @@ public class RecipeRemove {
 	 */
 	protected static void removeToolOrArmorDireRecipe(String material, String ItemType) {
 		try {
-			Field f = Config.class.getDeclaredField(material + "_" + ItemType.toLowerCase());
-			if(f.getBoolean(UpgradeRecipesMod.cfg) == true) {
+			//Field f = Config.class.getDeclaredField(material + "_" + ItemType.toLowerCase());
+			//if(f.getBoolean(UpgradeRecipesMod.cfg) == true) {
 				ResourceLocation item = new ResourceLocation("minecraft:air");
 				//ResourceLocation item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
-				if(UpgradeRecipesCommonProxy.ToolMap.containsKey(material + ":" + ItemType.toLowerCase())) {
-					item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
-				}
-				else if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(material + ":" + ItemType.toLowerCase())) {
-					item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
+				//if(UpgradeRecipesCommonProxy.ToolMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					//item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
+				//}
+				//else if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					//item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
+				//}
+				if(UpgradeRecipesCommonProxy.ItemMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
 				}
 				if(Item.REGISTRY.containsKey(item)) {
 					DireRecipeHandler.removeDireRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false);
@@ -216,7 +229,7 @@ public class RecipeRemove {
 						UpgradeRecipesMod.log.warn("Couldn't remove Dire Recipe for " + item.getResourcePath() + " as it wasn't found in the Item Registry.");
 					}
 				}
-			}
+			//}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//UpgradeRecipesMod.log.catching(e);
@@ -230,19 +243,22 @@ public class RecipeRemove {
 	 * Removes the Recipe for the Tool or Armor with the same material and ItemType from Draconic Evolutions Fusion Crafting.
 	 * Removes the Recipe only if it is Enabled in the Config File.
 	 * @param material the Tool Material.
-	 * @param ItemType the ItemType.(Pickaxe / Axe / Shovel / Hoe / Sword / Bow / Helmet / Chestplate / Leggings / Boots)
+	 * @param ItemType the ItemType.(Staff / Pickaxe / Axe / Shovel / Hoe / Sword / Bow / Helmet / Chestplate / Leggings / Boots)
 	 */
 	protected static void removeToolOrArmorFusionRecipe(String material, String ItemType) {
 		try {
-			Field f = Config.class.getDeclaredField(material + "_" + ItemType.toLowerCase());
-			if(f.getBoolean(UpgradeRecipesMod.cfg) == true) {
+			//Field f = Config.class.getDeclaredField(material + "_" + ItemType.toLowerCase());
+			//if(f.getBoolean(UpgradeRecipesMod.cfg) == true) {
 				ResourceLocation item = new ResourceLocation("minecraft:air");
 				//ResourceLocation item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
-				if(UpgradeRecipesCommonProxy.ToolMap.containsKey(material + ":" + ItemType.toLowerCase())) {
-					item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
-				}
-				else if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(material + ":" + ItemType.toLowerCase())) {
-					item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
+				//if(UpgradeRecipesCommonProxy.ToolMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					//item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
+				//}
+				//else if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					//item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
+				//}
+				if(UpgradeRecipesCommonProxy.ItemMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
 				}
 				if(Item.REGISTRY.containsKey(item)) {
 					//removeFusionRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false);
@@ -254,7 +270,7 @@ public class RecipeRemove {
 						UpgradeRecipesMod.log.warn("Couldn't remove Fusion Recipe for " + item.getResourcePath() + " as it wasn't found in the Item Registry.");
 					}
 				}
-			}
+			//}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//UpgradeRecipesMod.log.catching(e);
@@ -273,16 +289,19 @@ public class RecipeRemove {
 	protected static void removeToolOrArmorRecipe(String material, String ItemType) {
 		try {
 			//Field f = Config.class.getDeclaredField(material + "_" + ItemType);
-			Field f = Config.class.getDeclaredField(material + "_" + ItemType.toLowerCase());
-			if(f.getBoolean(UpgradeRecipesMod.cfg) == true) {
+			//Field f = Config.class.getDeclaredField(material + "_" + ItemType.toLowerCase());
+			//if(f.getBoolean(UpgradeRecipesMod.cfg) == true) {
 				ResourceLocation item = new ResourceLocation("minecraft:air");
 				//ResourceLocation item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType);
 				//ResourceLocation item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
-				if(UpgradeRecipesCommonProxy.ToolMap.containsKey(material + ":" + ItemType.toLowerCase())) {
-					item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
-				}
-				else if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(material + ":" + ItemType.toLowerCase())) {
-					item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
+				//if(UpgradeRecipesCommonProxy.ToolMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					//item = UpgradeRecipesCommonProxy.ToolMap.get(material + ":" + ItemType.toLowerCase());
+				//}
+				//else if(UpgradeRecipesCommonProxy.ArmorMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					//item = UpgradeRecipesCommonProxy.ArmorMap.get(material + ":" + ItemType.toLowerCase());
+				//}
+				if(UpgradeRecipesCommonProxy.ItemMap.containsKey(material + ":" + ItemType.toLowerCase())) {
+					item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
 				}
 				if(Item.REGISTRY.containsKey(item)) {
 					removeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false);
@@ -293,7 +312,7 @@ public class RecipeRemove {
 						UpgradeRecipesMod.log.warn("Couldn't remove Recipe for " + item.getResourcePath() + " as it wasn't found in the Item Registry.");
 					}
 				}
-			}
+			//}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
@@ -392,6 +411,9 @@ public class RecipeRemove {
 				//} catch (Exception e) {
 					// TODO: handle exception
 				//}
+				if(inItem == null || outItem == null) {
+					continue;
+				}
 				if(outItem.equals(inItem)) {
 				//if(outItem.equals(inItem) && outDmg == inDmg) {
 					//recipes.remove(recipe);

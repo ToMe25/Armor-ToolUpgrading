@@ -1,0 +1,6 @@
+item.lapisdust.name=Lapislazulistaub
+item.refinedlapisingot.name=Raffinierter Lapislazulibarren
+tile.refinedlapisblock.name=Raffiniertes Lapislazuli
+tile.netherstarblock.name=Nethersternblock
+item.dummyitem.name=%s ersetzendes Dummy Item
+itemGroup.upgraderecipes=Armor & Tool Upgrading
