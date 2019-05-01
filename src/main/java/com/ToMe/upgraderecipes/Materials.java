@@ -2,11 +2,38 @@ package com.ToMe.upgraderecipes;
 
 public enum Materials {
 	
-	WOOD {
+	WOOD {//not WOODV because this is the Base Material
 		
 		@Override
 		public String[] getTypes() {
-			return new String[] {"pickaxe", "axe", "shovel", "hoe", "sword", "bow"};
+			//return new String[] {"pickaxe", "axe", "shovel", "hoe", "sword", "bow"};
+			return new String[] {"pickaxe", "axe", "shovel", "hoe", "rod", "sword", "bow", "shield"};
+		}
+		
+	},
+	WOODT {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"hammer", "excavator", "sickle", "shears"};
+		}
+		
+	},
+	WOODE {
+		
+		@Override
+		public String getMod() {
+			return "extrautils2";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"sickle"};
 		}
 		
 	},
@@ -18,11 +45,37 @@ public enum Materials {
 		}
 		
 	},
-	STONE {
+	STONE {//not STONEV because this is the Base Material
 		
 		@Override
 		public String[] getTypes() {
 			return new String[] {"pickaxe", "axe", "shovel", "hoe", "sword"};
+		}
+		
+	},
+	STONET {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"hammer", "excavator", "sickle", "shears", "rod", "bow", "shield"};
+		}
+		
+	},
+	STONEE {
+		
+		@Override
+		public String getMod() {
+			return "extrautils2";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"sickle"};
 		}
 		
 	},
@@ -31,6 +84,114 @@ public enum Materials {
 		@Override
 		public String[] getTypes() {
 			return new String[] {"helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	COPPER {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	TIN {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	LEAD {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	//SILVER {
+		
+		//@Override
+		//public String getMod() {
+			//return "thermalfoundation";
+		//}
+		
+	//},
+	ALUMINUM {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	//IRON,
+	IRON {//not IRONV because this is the Base Material
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "axe", "shovel", "hoe", "shears", "sword", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	IRONT {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"hammer", "excavator", "sickle", "rod", "bow", "shield"};
+		}
+		
+	},
+	IRONE {
+		
+		@Override
+		public String getMod() {
+			return "extrautils2";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"sickle"};
+		}
+		
+	},
+	SILVER {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
 		}
 		
 	},
@@ -43,6 +204,32 @@ public enum Materials {
 		}
 		
 	},
+	NICKEL {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	CONSTANTAN {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
 	OSMIUM {
 		
 		@Override
@@ -52,8 +239,22 @@ public enum Materials {
 		}
 		
 	},
-	IRON,
-	BRONZE {
+	//IRON,
+	BRONZET {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	//BRONZE {
+	BRONZEM {
 		
 		@Override
 		public String getMod() {
@@ -62,7 +263,59 @@ public enum Materials {
 		}
 		
 	},
-	GOLD,
+	GOLD,//not GOLDV because this is the Base Material
+	GOLDT {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"hammer", "excavator", "sickle", "shears", "rod", "bow", "shield"};
+		}
+		
+	},
+	GOLDE {
+		
+		@Override
+		public String getMod() {
+			return "extrautils2";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"sickle"};
+		}
+		
+	},
+	ELECTRUM {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	INVAR {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
 	GLOWSTONE {
 		
 		@Override
@@ -72,7 +325,21 @@ public enum Materials {
 		}
 		
 	},
-	STEEL {
+	STEELT {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
+		}
+		
+	},
+	//STEEL {
+	STEELM {
 		
 		@Override
 		public String getMod() {
@@ -105,7 +372,33 @@ public enum Materials {
 		}
 		
 	},
-	DIAMOND,
+	DIAMOND,//not DIAMONDV because this is the Base Material
+	DIAMONDT {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"hammer", "excavator", "sickle", "shears", "rod", "bow", "shield"};
+		}
+		
+	},
+	DIAMONDE {
+		
+		@Override
+		public String getMod() {
+			return "extrautils2";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"sickle"};
+		}
+		
+	},
 	SAPPHIRE {
 		
 		@Override
@@ -127,6 +420,19 @@ public enum Materials {
 		@Override
 		public String getMod() {
 			return "rubymod";
+		}
+		
+	},
+	PLATINUM {
+		
+		@Override
+		public String getMod() {
+			return "thermalfoundation";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"pickaxe", "hammer", "axe", "shovel", "excavator", "hoe", "sickle", "shears", "rod", "sword", "bow", "shield", "helmet", "chestplate", "leggings", "boots"};
 		}
 		
 	},
@@ -296,6 +602,19 @@ public enum Materials {
 		}*/
 		
 	},
+	OPINIUMCORE {
+		
+		@Override
+		public String getMod() {
+			return "extrautils2";
+		}
+		
+		@Override
+		public String[] getTypes() {
+			return new String[] {"axe", "sword", "bow"};
+		}
+		
+	},
 	DRACONIC {
 		
 		@Override
@@ -439,20 +758,38 @@ public enum Materials {
 				if(type.equalsIgnoreCase("pickaxe")) {
 					RecipeAdd.addPickaxeRecipe(getName());
 				}
+				else if(type.equalsIgnoreCase("hammer")) {
+					RecipeAdd.addHammerRecipe(getName());
+				}
 				else if(type.equalsIgnoreCase("axe")) {
 					RecipeAdd.addAxeRecipe(getName());
 				}
 				else if(type.equalsIgnoreCase("shovel")) {
 					RecipeAdd.addShovelRecipe(getName());
 				}
+				else if(type.equalsIgnoreCase("excavator")) {
+					RecipeAdd.addExcavatorRecipe(getName());
+				}
 				else if(type.equalsIgnoreCase("hoe")) {
 					RecipeAdd.addHoeRecipe(getName());
+				}
+				else if(type.equalsIgnoreCase("sickle")) {
+					RecipeAdd.addSickleRecipe(getName());
+				}
+				else if(type.equalsIgnoreCase("shears")) {
+					RecipeAdd.addShearsRecipe(getName());
+				}
+				else if(type.equalsIgnoreCase("rod")) {
+					RecipeAdd.addRodRecipe(getName());
 				}
 				else if(type.equalsIgnoreCase("sword")) {
 					RecipeAdd.addSwordRecipe(getName());
 				}
 				else if(type.equalsIgnoreCase("bow")) {
 					RecipeAdd.addBowRecipe(getName());
+				}
+				else if(type.equalsIgnoreCase("shield")) {
+					RecipeAdd.addShieldRecipe(getName());
 				}
 				else if(type.equalsIgnoreCase("helmet")) {
 					RecipeAdd.addHelmetRecipe(getName());

@@ -43,6 +43,7 @@ public class UpgradeRecipesMod {
 	public static final String MCVERSION = "[1.12,1.12.2]";
 	public static final String DEPENDENCIES = "after:avaritia;" +
 											  "after:draconicevolution;" +
+											  "after:extrautils2;" +
 											  "after:Mekanism;" +//WHY MEKANISM???
 											  "after:mekanism;" +
 											  "after:MekanismTools;" +//WHY MEKANISM???
@@ -52,6 +53,7 @@ public class UpgradeRecipesMod {
 											  "after:weapons;" +
 											  "after:rubymod;" +
 											  "after:stars;" +
+											  "after:thermalfoundation;" +
 											  "after:trigems";
 	
 	@Instance
