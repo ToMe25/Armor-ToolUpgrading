@@ -265,7 +265,8 @@ public class RecipeAdd {
 						"MMM",
 						" U ",
 						" S ",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'S', "stickWood"
@@ -365,6 +366,43 @@ public class RecipeAdd {
 	}
 	
 	/**
+	 * adds a standard Hammer upgrade recipe.
+	 * @param material
+	 */
+	protected static void addHammerRecipe(String material) {
+		if(!Config.tools) {
+			return;
+		}
+		String ItemType = "Hammer";
+		try {
+			String Mat = UpgradeRecipesCommonProxy.MaterialMap.get(material);
+			if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
+				Mat = getBlockOreDict(material);
+			}
+			ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
+			if(Item.REGISTRY.containsKey(item)) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+					"MMM",
+					"MUM",
+					" S ",
+					//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
+					'S', "stickWood"
+				}));
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Recipe for " + item.getResourcePath() + "!");
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
+		}
+	}
+	
+	/**
 	 * adds a standard Axe upgrade recipe.
 	 * @param material
 	 */
@@ -392,7 +430,8 @@ public class RecipeAdd {
 						"MM",
 						"MU",
 						" S",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'S', "stickWood"
@@ -517,7 +556,8 @@ public class RecipeAdd {
 						"M",
 						"U",
 						"S",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'S', "stickWood"
@@ -616,6 +656,43 @@ public class RecipeAdd {
 	}
 	
 	/**
+	 * adds a standard Excavator upgrade recipe.
+	 * @param material
+	 */
+	protected static void addExcavatorRecipe(String material) {
+		if(!Config.tools) {
+			return;
+		}
+		String ItemType = "Excavator";
+		try {
+			String Mat = UpgradeRecipesCommonProxy.MaterialMap.get(material);
+			if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
+				Mat = getBlockOreDict(material);
+			}
+			ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
+			if(Item.REGISTRY.containsKey(item)) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+					" M ",
+					"MUM",
+					" S ",
+					//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
+					'S', "stickWood"
+				}));
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Recipe for " + item.getResourcePath() + "!");
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
+		}
+	}
+	
+	/**
 	 * adds a standard Hoe upgrade recipe.
 	 * @param material
 	 */
@@ -642,7 +719,8 @@ public class RecipeAdd {
 						"MM",
 						" U",
 						" S",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'S', "stickWood"
@@ -741,6 +819,125 @@ public class RecipeAdd {
 	}
 	
 	/**
+	 * adds a standard Sickle upgrade recipe.
+	 * @param material
+	 */
+	protected static void addSickleRecipe(String material) {
+		if(!Config.tools) {
+			return;
+		}
+		String ItemType = "Sickle";
+		try {
+			String Mat = UpgradeRecipesCommonProxy.MaterialMap.get(material);
+			if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
+				Mat = getBlockOreDict(material);
+			}
+			ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
+			if(Item.REGISTRY.containsKey(item)) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+					" M ",
+					"  M",
+					"UM ",
+					//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))
+				}));
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Recipe for " + item.getResourcePath() + "!");
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
+		}
+	}
+	
+	/**
+	 * adds a standard Shears upgrade recipe.
+	 * @param material
+	 */
+	protected static void addShearsRecipe(String material) {
+		if(!Config.tools) {
+			return;
+		}
+		String ItemType = "Shears";
+		try {
+			String Mat = UpgradeRecipesCommonProxy.MaterialMap.get(material);
+			if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
+				Mat = getBlockOreDict(material);
+			}
+			ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
+			if(Item.REGISTRY.containsKey(item)) {
+				Item upgrade = Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType));
+				if(upgrade != null) {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+						"M ",
+						"UM",
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'U', upgrade
+					}));
+				}
+				else {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+						"M ",
+						" M",
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					}));
+				}
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Recipe for " + item.getResourcePath() + "!");
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
+		}
+	}
+	
+	/**
+	 * adds a standard Fishing Rod upgrade recipe.
+	 * @param material
+	 */
+	protected static void addRodRecipe(String material) {
+		if(!Config.tools) {
+			return;
+		}
+		String ItemType = "Rod";
+		try {
+			String Mat = UpgradeRecipesCommonProxy.MaterialMap.get(material);
+			if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
+				Mat = getBlockOreDict(material);
+			}
+			ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
+			if(Item.REGISTRY.containsKey(item)) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+					"  M",
+					" MS",
+					"U S",
+					//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
+					'S', "string"
+				}));
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Recipe for " + item.getResourcePath() + "!");
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
+		}
+	}
+	
+	/**
 	 * adds a standard Sword upgrade recipe.
 	 * @param material
 	 */
@@ -767,7 +964,8 @@ public class RecipeAdd {
 						"M",
 						"M",
 						"U",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType))
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "stickWood" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 					}));
@@ -888,7 +1086,8 @@ public class RecipeAdd {
 						" MS",
 						"M U",
 						" MS",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "string" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'S', "string"
@@ -928,6 +1127,42 @@ public class RecipeAdd {
 	}
 	
 	/**
+	 * adds a standard Shield upgrade recipe.
+	 * @param material
+	 */
+	protected static void addShieldRecipe(String material) {
+		if(!Config.tools) {
+			return;
+		}
+		String ItemType = "Shield";
+		try {
+			String Mat = UpgradeRecipesCommonProxy.MaterialMap.get(material);
+			if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
+				Mat = getBlockOreDict(material);
+			}
+			ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
+			if(Item.REGISTRY.containsKey(item)) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
+					"MUM",
+					"MMM",
+					" M ",
+					//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+					'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? "ingotIron" : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType))
+				}));
+				if(Config.debug) {
+					UpgradeRecipesMod.log.info("Added Recipe for " + item.getResourcePath() + "!");
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if(Config.debug) {
+				UpgradeRecipesMod.log.catching(e);
+			}
+		}
+	}
+	
+	/**
 	 * adds a standard Wyvern Tool upgrade recipe.
 	 * @param ItemType the ItemType.(Pickaxe / Axe / Shovel / Hoe / Sword / Bow)
 	 */
@@ -957,7 +1192,8 @@ public class RecipeAdd {
 						" C ",
 						"MUM",
 						" E ",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? Item.REGISTRY.getObject(new ResourceLocation(ItemType.equalsIgnoreCase("bow") ? "bow" : ("diamond_" + ItemType))) : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'C', wyvern_core,
@@ -1028,7 +1264,8 @@ public class RecipeAdd {
 						"MCM",
 						"MUM",
 						"MEM",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'U', Item.REGISTRY.getObject(getUpgradeMaterial(material, ItemType)),
 						'U', Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)) == null ? Item.REGISTRY.getObject(new ResourceLocation("diamond_" + ItemType)) : Item.REGISTRY.getObject(RecipeAdd.getUpgradeMaterial(material, ItemType)),
 						'C', wyvern_core,
@@ -1141,7 +1378,8 @@ public class RecipeAdd {
 						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
 							"MMM",
 							"MUM",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 							'U', upgrade
 						}));
 					}
@@ -1149,7 +1387,8 @@ public class RecipeAdd {
 						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
 							"MMM",
 							"M M",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						}));
 					}
 					if(Config.debug) {
@@ -1201,7 +1440,8 @@ public class RecipeAdd {
 							"MUM",
 							"MMM",
 							"MMM",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 							'U', upgrade
 						}));
 					}
@@ -1210,7 +1450,8 @@ public class RecipeAdd {
 							"M M",
 							"MMM",
 							"MMM",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						}));
 					}
 					if(Config.debug) {
@@ -1262,7 +1503,8 @@ public class RecipeAdd {
 							"MMM",
 							"MUM",
 							"M M",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 							'U', upgrade
 						}));
 					}
@@ -1271,7 +1513,8 @@ public class RecipeAdd {
 							"MMM",
 							"M M",
 							"M M",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						}));
 					}
 					if(Config.debug) {
@@ -1321,7 +1564,8 @@ public class RecipeAdd {
 						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
 							"MUM",
 							"M M",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 							'U', upgrade
 						}));
 					}
@@ -1329,7 +1573,8 @@ public class RecipeAdd {
 						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
 							"M M",
 							"M M",
-							'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat
+							'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						}));
 					}
 					if(Config.debug) {
@@ -1375,7 +1620,8 @@ public class RecipeAdd {
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
 						"MCM",
 						"MUM",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'C', new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("mo", "isolinear_circuit")), 1, 1),
 						//'C', circuit,
 						'C', new ItemStack(circuit, 1, 1),
@@ -1386,7 +1632,8 @@ public class RecipeAdd {
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.REGISTRY.getObject(item)), new Object[] {
 						"MCM",
 						"M M",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'C', new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("mo", "isolinear_circuit")), 1, 1)
 						//'C', circuit
 						'C', new ItemStack(circuit, 1, 1),
@@ -1434,7 +1681,8 @@ public class RecipeAdd {
 						"MUM",
 						"MCM",
 						"MMM",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'C', new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("mo", "isolinear_circuit")), 1, 1),
 						//'C', circuit,
 						'C', new ItemStack(circuit, 1, 1),
@@ -1446,7 +1694,8 @@ public class RecipeAdd {
 						"M M",
 						"MCM",
 						"MMM",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'C', new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("mo", "isolinear_circuit")), 1, 1)
 						//'C', circuit
 						'C', new ItemStack(circuit, 1, 1),
@@ -1494,7 +1743,8 @@ public class RecipeAdd {
 						"MCM",
 						"MUM",
 						"M M",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'C', new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("mo", "isolinear_circuit")), 1, 1),
 						//'C', circuit,
 						'C', new ItemStack(circuit, 1, 1),
@@ -1506,7 +1756,8 @@ public class RecipeAdd {
 						"MCM",
 						"M M",
 						"M M",
-						'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						//'M', Mat.contains(":") ? Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
+						'M', Mat.contains(":") ? Mat.contains("/") ? new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(Mat.substring(0, Mat.indexOf("/")))), 1, Integer.parseInt(Mat.substring(Mat.indexOf("/") + 1))) : Item.REGISTRY.getObject(new ResourceLocation(Mat)) : Mat,
 						//'C', new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("mo", "isolinear_circuit")), 1, 1)
 						//'C', circuit
 						'C', new ItemStack(circuit, 1, 1),
