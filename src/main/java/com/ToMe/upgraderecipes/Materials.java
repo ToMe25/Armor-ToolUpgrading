@@ -2,7 +2,7 @@ package com.ToMe.upgraderecipes;
 
 public enum Materials {
 	
-	WOOD {//not WOODV because this is the Base Material
+	/**WOOD {//not WOODV because this is the Base Material
 		
 		@Override
 		public String[] getTypes() {
@@ -592,14 +592,14 @@ public enum Materials {
 			}
 		}
 		
-		/*@Override
-		public void removeRecipes() {
-			for(String type:getTypes()) {
-				if(UpgradeRecipesMod.cfg.isToolEnabled(getName(), type, getMod())) {
-					RecipeRemove.removeToolOrArmorFusionRecipe(getName(), type);
-				}
-			}
-		}*/
+		//@Override
+		//public void removeRecipes() {
+			//for(String type:getTypes()) {
+				//if(UpgradeRecipesMod.cfg.isToolEnabled(getName(), type, getMod())) {
+					//RecipeRemove.removeToolOrArmorFusionRecipe(getName(), type);
+				//}
+			//}
+		//}
 		
 	},
 	OPINIUMCORE {
@@ -820,6 +820,6 @@ public enum Materials {
 	
 	public boolean isModLoaded() {
 		return UpgradeRecipesCommonProxy.isModLoaded(getMod());
-	}
+	}*/
 	
 }

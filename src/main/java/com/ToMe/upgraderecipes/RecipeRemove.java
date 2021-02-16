@@ -2,7 +2,14 @@ package com.ToMe.upgraderecipes;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 
 //import com.brandon3055.draconicevolution.api.fusioncrafting.FusionRecipeAPI;
 //import com.brandon3055.draconicevolution.api.fusioncrafting.IFusionRecipe;
@@ -13,6 +20,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeRemove {
 	
@@ -20,13 +28,24 @@ public class RecipeRemove {
 	 * Removes the Recipes for all Items that should get a new Recipe.
 	 */
 	public static void removeRecipes() {
-		for(Materials mat:Materials.values()) {
+		//for(Materials mat:Materials.values()) {
 			//mat.removeRecipes();
 			//if(Loader.isModLoaded(mat.getMod())) {
 			//if(Loader.isModLoaded(mat.getMod()) || Loader.isModLoaded(mat.getMod().toLowerCase())) {
 			//if(UpgradeRecipesCommonProxy.isModLoaded(mat.getMod())) {
-			if(mat.isModLoaded()) {
-				mat.removeRecipes();
+			//if(mat.isModLoaded()) {
+				//mat.removeRecipes();
+			//}
+		//}
+		for(String str:UpgradeRecipesCommonProxy.ItemMap.keySet()) {
+			String[] material = str.split(":");
+			if(material.length > 1) {
+				removeToolOrArmorRecipe(material[0], material[1]);
+			}
+			else {
+				if(Config.debug) {
+					UpgradeRecipesMod.log.warn("found invalid Material " + str);
+				}
 			}
 		}
 		//if(Config.tools) {
@@ -304,7 +323,10 @@ public class RecipeRemove {
 					item = UpgradeRecipesCommonProxy.ItemMap.get(material + ":" + ItemType.toLowerCase());
 				}
 				if(Item.REGISTRY.containsKey(item)) {
-					removeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false);
+					//removeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false);
+					//removeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false, material + ":" + ItemType.toLowerCase());
+					System.out.println(material);
+					removeRecipe(new ItemStack(Item.REGISTRY.getObject(item)), false, material);
 				}
 				else {
 					if(Config.debug) {
@@ -383,9 +405,11 @@ public class RecipeRemove {
 	 * Removes all Crafting Recipes with the given Result.
 	 * @param result the ItemStack to get the Item from.
 	 * @param useDamage use / ignore the Item Damage
+	 * @param material the Material to get the Item for
 	 */
 	//public static void removeRecipe(ItemStack result) {
-	public static void removeRecipe(ItemStack result, boolean useDamage) {
+	//public static void removeRecipe(ItemStack result, boolean useDamage) {
+	public static void removeRecipe(ItemStack result, boolean useDamage, String material) {
 		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
 		List<IRecipe> recipes_copy = new ArrayList<IRecipe>();
 		//List<IRecipe> remove = new ArrayList<IRecipe>();
@@ -416,6 +440,159 @@ public class RecipeRemove {
 				}
 				if(outItem.equals(inItem)) {
 				//if(outItem.equals(inItem) && outDmg == inDmg) {
+					try {
+						for(Field f:recipe.getClass().getDeclaredFields()) {
+							if(f.getName().equalsIgnoreCase("input") || f.getName().equalsIgnoreCase("recipeItems")) {
+								f.setAccessible(true);
+								Object obj = f.get(recipe);
+								//for(Object o:(Object[]) f.get(recipe)) {
+									//if(o instanceof Item) {
+										//Item item = (Item) o;
+										//if(item.equals(inItem)) {
+											//continue;
+										//}
+										//if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+											//if(item != null && item != Item.getItemFromBlock(Blocks.AIR)) {
+												//UpgradeRecipesCommonProxy.MaterialMap.put(material, item.getRegistryName().toString());
+											//}
+										//}
+									//}
+									//else if(o instanceof ItemStack) {
+										//ItemStack stack = (ItemStack) o;
+										//if(stack.getItem().equals(inItem)) {
+											//continue;
+										//}
+										//if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+											//if(stack != null && stack.getItem() != null && stack.getItem() != Item.getItemFromBlock(Blocks.AIR)) {
+												//UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString());
+												//UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString() + (stack.isItemDamaged() ? ("/" + stack.getItemDamage()) : ""));
+											//}
+										//}
+									//}
+									//else if(o instanceof String) {
+										//String string = (String) o;
+										//if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+											//if(string != null && !string.isEmpty()) {
+												//UpgradeRecipesCommonProxy.MaterialMap.put(material, string);
+											//}
+										//}
+									//}
+								//}
+								if(obj instanceof Object[]) {
+									Object[] arr = (Object[]) obj;
+									for(Object o:(Object[]) obj) {
+									//for(Object o:reverseArray(arr)) {
+										if(o instanceof Item) {
+											Item item = (Item) o;
+											if(item.equals(inItem)) {
+												continue;
+											}
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(item != null && item != Item.getItemFromBlock(Blocks.AIR)) {
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, item.getRegistryName().toString());
+												}
+											}
+										}
+										else if(o instanceof ItemStack) {
+											ItemStack stack = (ItemStack) o;
+											if(stack.getItem().equals(inItem)) {
+												continue;
+											}
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(stack != null && stack.getItem() != null && stack.getItem() != Item.getItemFromBlock(Blocks.AIR)) {
+													//UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString());
+													//UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString() + (stack.isItemDamaged() ? ("/" + stack.getItemDamage()) : ""));
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString() + (stack.getItem().getHasSubtypes() ? ("/" + stack.getMetadata()) : ""));
+												}
+											}
+										}
+										else if(o instanceof String) {
+											String string = (String) o;
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(string != null && !string.isEmpty()) {
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, string);
+												}
+											}
+										}
+										else if(o instanceof Collection) {
+											Collection coll = (Collection) o;
+											//List<String> oreDicts = new ArrayList<String>();
+											List<String> oreDicts = null;
+											for(Object ob:coll) {
+												if(ob instanceof ItemStack) {
+													ItemStack stack = (ItemStack) ob;
+													List<String> currentOreDicts = new ArrayList<String>();
+													for(int i:OreDictionary.getOreIDs(stack)) {
+														//if(oreDicts == null) {
+															//oreDicts = new ArrayList<String>();
+														//}
+														currentOreDicts.add(OreDictionary.getOreName(i));
+													}
+													//if(oreDicts.isEmpty()) {
+													if(oreDicts == null) {
+														oreDicts = currentOreDicts;
+													}
+													else {
+														for(String ore:oreDicts) {
+															if(!currentOreDicts.contains(ore)) {
+																oreDicts.remove(ore);
+															}
+														}
+													}
+												}
+											}
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(!oreDicts.isEmpty()) {
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, oreDicts.get(0));
+													System.out.println("set " + material + " to " + oreDicts.get(0));
+												}
+											}
+										}
+									}
+								} else if(obj instanceof List) {
+									List list = (List) obj;
+									for(Object o:(List) obj) {
+									//for(Object o:Lists.reverse(list)) {
+										if(o instanceof Item) {
+											Item item = (Item) o;
+											if(item.equals(inItem)) {
+												continue;
+											}
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(item != null && item != Item.getItemFromBlock(Blocks.AIR)) {
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, item.getRegistryName().toString());
+												}
+											}
+										}
+										else if(o instanceof ItemStack) {
+											ItemStack stack = (ItemStack) o;
+											if(stack.getItem().equals(inItem)) {
+												continue;
+											}
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(stack != null && stack.getItem() != null && stack.getItem() != Item.getItemFromBlock(Blocks.AIR)) {
+													//UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString());
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, stack.getItem().getRegistryName().toString() + (stack.isItemDamaged() ? ("/" + stack.getItemDamage()) : ""));
+												}
+											}
+										}
+										else if(o instanceof String) {
+											String string = (String) o;
+											if(!UpgradeRecipesCommonProxy.MaterialMap.containsKey(material)) {
+												if(string != null && !string.isEmpty()) {
+													UpgradeRecipesCommonProxy.MaterialMap.put(material, string);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					} catch (Exception e) {
+						if(Config.debug) {
+							UpgradeRecipesMod.log.catching(e);
+						}
+					}
 					//recipes.remove(recipe);
 					//remove.add(recipe);
 					if(useDamage) {
@@ -462,5 +639,16 @@ public class RecipeRemove {
 			//}
 		}
 	}
+	
+	//private static <T> T[] reverseArray(T[] toReverse) {
+		//T[] reversed = toReverse.clone();
+		//int size = toReverse.length;
+		//int i = 0;
+		//for(T t:toReverse) {
+			//reversed[size - i] = t;
+			//i++;
+		//}
+		//return reversed;
+	//}
 	
 }

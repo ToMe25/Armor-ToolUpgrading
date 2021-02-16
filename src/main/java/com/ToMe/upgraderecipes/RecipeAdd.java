@@ -18,7 +18,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class RecipeAdd {
 	
-	private static ArrayList<String> Tiers = new ArrayList<String>();
+	//private static ArrayList<String> Tiers = new ArrayList<String>();
 	//private static ArrayList<String> ToolTiers = new ArrayList<String>();
 	//private static ArrayList<String> ArmorTiers = new ArrayList<String>();
 	
@@ -26,15 +26,26 @@ public class RecipeAdd {
 	 * Adds the Recipes for all Items that should get a new Recipe.
 	 */
 	public static void addRecipes() {
-		initTiersLists();
+		//initTiersLists();
 		
-		for(Materials mat:Materials.values()) {
+		//for(Materials mat:Materials.values()) {
 			//mat.addRecipes();
 			//if(Loader.isModLoaded(mat.getMod())) {
 			//if(Loader.isModLoaded(mat.getMod()) || Loader.isModLoaded(mat.getMod().toLowerCase())) {
 			//if(UpgradeRecipesCommonProxy.isModLoaded(mat.getMod())) {
-			if(mat.isModLoaded()) {
-				mat.addRecipes();
+			//if(mat.isModLoaded()) {
+				//mat.addRecipes();
+			//}
+		//}
+		for(String str:UpgradeRecipesCommonProxy.ItemMap.keySet()) {
+			String[] material = str.split(":");
+			if(material.length > 1) {
+				addRecipe(material[0], material[1]);
+			}
+			else {
+				if(Config.debug) {
+					UpgradeRecipesMod.log.warn("found invalid Material " + str);
+				}
 			}
 		}
 		/*if(Config.tools) {
@@ -251,6 +262,7 @@ public class RecipeAdd {
 				//f = Config.class.getDeclaredField(material + "_" + "blocks");
 				//Field f = Config.class.getDeclaredField(material + "_" + "blocks");
 				//if(f.getBoolean(UpgradeRecipesMod.cfg)) {
+				System.out.println(UpgradeRecipesCommonProxy.MaterialMap);
 				if(UpgradeRecipesMod.cfg.blockEnabled(material, "")) {
 					Mat = getBlockOreDict(material);
 					//Mat = getBlockOreDict(UpgradeRecipesCommonProxy.ToolMaterialMap.get(material));
@@ -1779,24 +1791,24 @@ public class RecipeAdd {
 	 * Initializes the Material Tier Lists.
 	 */
 	//public static void initTiersLists() {
-	protected static void initTiersLists() {
-		for(Materials mat:Materials.values()) {
-			if(mat.isEnabled()) {
-				Tiers.add(mat.getName().toLowerCase());
-			}
-		}
-		/*if(Config.tools) {
+	//protected static void initTiersLists() {
+		//for(Materials mat:Materials.values()) {
+			//if(mat.isEnabled()) {
+				//Tiers.add(mat.getName().toLowerCase());
+			//}
+		//}
+		//if(Config.tools) {
 			//boolean gem = false;
-			for(Materials mat:Materials.values()) {
-				if(mat.isEnabled()) {
-					ToolTiers.add(mat.getName().toLowerCase());
+			//for(Materials mat:Materials.values()) {
+				//if(mat.isEnabled()) {
+					//ToolTiers.add(mat.getName().toLowerCase());
 					//if(mat.isGem()) {
 						//gem = true;
 					//}
-				}
-			}
+				//}
+			//}
 			//ToolTiers.add("wood");//Wood and Diamond being registered without checking if they enabled because they are needed.
-			*//*ToolTiers.add("wood");//Wood is being registered without checking if Wood is enabled because Wood is needed.
+			/*ToolTiers.add("wood");//Wood is being registered without checking if Wood is enabled because Wood is needed.
 			//if(Config.stone) {
 				//ToolTiers.add("stone");
 			//}
@@ -1971,7 +1983,7 @@ public class RecipeAdd {
 				}
 			}
 		}*/
-	}
+	//}
 	
 	/**
 	 * This method gets the Material to use as Ingredient for the given other with the given ItemType.
@@ -1983,54 +1995,71 @@ public class RecipeAdd {
 	//private static String getUpgradeMaterial(String UpgradetMaterial, String ItemType) {
 	//private static ResourceLocation getUpgradeMaterial(String UpgradetMaterial, String ItemType) {
 	protected static ResourceLocation getUpgradeMaterial(String UpgradetMaterial, String ItemType) {
-		ResourceLocation ret = null;
-		int i = 0;
-		while(i < Tiers.size()) {
-			if(Tiers.get(i).equalsIgnoreCase(UpgradetMaterial)) {
-				try {
-					int ii = 1;
-					while(ii <= i) {
-						try {
+		ItemType = ItemType.toLowerCase();
+		String material = UpgradetMaterial + ":" + ItemType;
+		String last = null;
+		for(String s:UpgradeRecipesCommonProxy.ItemMap.keySet()) {
+			//String material = s.substring(0, s.lastIndexOf(":"));
+			//if(material.equalsIgnoreCase(UpgradetMaterial)) {
+			if(s.equals(material)) {
+				//return UpgradeRecipesCommonProxy.ItemMap.get(last + ":" + ItemType);
+				return UpgradeRecipesCommonProxy.ItemMap.get(last);
+			}
+			String foundItemType = s.substring(s.lastIndexOf(":") + 1);
+			//last = material;
+			//last = s;
+			if(foundItemType.equals(ItemType)) {
+				last = s;
+			}
+		}
+		//ResourceLocation ret = null;
+		//int i = 0;
+		//while(i < Tiers.size()) {
+			//if(Tiers.get(i).equalsIgnoreCase(UpgradetMaterial)) {
+				//try {
+					//int ii = 1;
+					//while(ii <= i) {
+						//try {
 							//Materials mat = Materials.valueOf(UpgradetMaterial.toUpperCase());
 							//Materials mat = Materials.valueOf(Tiers.get(i - ii));
-							Materials mat = Materials.valueOf(Tiers.get(i - ii).toUpperCase());
+							//Materials mat = Materials.valueOf(Tiers.get(i - ii).toUpperCase());
 							//if(mat == null) {
 								//ii++;
 							//}
 							//else {
-							if(mat != null) {
-								if(UpgradeRecipesCommonProxy.ArrayContains(mat.getTypes(), ItemType.toLowerCase())) {
-									if(UpgradeRecipesMod.cfg.isToolEnabled(mat.getName(), ItemType.toLowerCase(), mat.getMod())) {
-										String key = Tiers.get(i - ii) + ":" + ItemType.toLowerCase();
+							//if(mat != null) {
+								//if(UpgradeRecipesCommonProxy.ArrayContains(mat.getTypes(), ItemType.toLowerCase())) {
+									//if(UpgradeRecipesMod.cfg.isToolEnabled(mat.getName(), ItemType.toLowerCase(), mat.getMod())) {
+										//String key = Tiers.get(i - ii) + ":" + ItemType.toLowerCase();
 										//ResourceLocation item = UpgradeRecipesCommonProxy.ToolMap.get(key);
-										ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(key);
-										if(Item.REGISTRY.containsKey(item)) {
+										//ResourceLocation item = UpgradeRecipesCommonProxy.ItemMap.get(key);
+										//if(Item.REGISTRY.containsKey(item)) {
 											//ret = UpgradeRecipesCommonProxy.ToolMap.get(key);
-											ret = UpgradeRecipesCommonProxy.ItemMap.get(key);
-											if(Config.debug) {
-												UpgradeRecipesMod.log.info("Upgrade Material: " + ret.getResourcePath() + "!");
-											}
-											break;
-										}
+											//ret = UpgradeRecipesCommonProxy.ItemMap.get(key);
+											//if(Config.debug) {
+												//UpgradeRecipesMod.log.info("Upgrade Material: " + ret.getResourcePath() + "!");
+											//}
+											//break;
+										//}
 										//else {
 											//ii++;
 										//}
-									}
+									//}
 									//else {
 										//ii++;
 									//}
-								}
+								//}
 								//else {
 									//ii++;
 								//}
-							}
-						} catch (Exception e) {
+							//}
+						//} catch (Exception e) {
 							// TODO: handle exception
-							if(Config.debug) {
-								UpgradeRecipesMod.log.catching(e);
-							}
-						}
-						ii++;
+							//if(Config.debug) {
+								//UpgradeRecipesMod.log.catching(e);
+							//}
+						//}
+						//ii++;
 						/*boolean bool = false;
 						if(Tiers.get(i - ii).equals("wood") || Tiers.get(i - ii).equals("diamond")) {
 							bool = true;
@@ -2075,17 +2104,17 @@ public class RecipeAdd {
 							}
 						}
 						ii++;*/
-					}
-				} catch (Exception e) {
+					//}
+				//} catch (Exception e) {
 					// TODO: handle exception
-					if(Config.debug) {
-						UpgradeRecipesMod.log.catching(e);
-					}
-				}
-			}
-			i++;
-		}
-		return ret;
+					//if(Config.debug) {
+						//UpgradeRecipesMod.log.catching(e);
+					//}
+				//}
+			//}
+			//i++;
+		//}
+		//return ret;
 		//String ret = "";
 		//ResourceLocation ret;
 		/*ResourceLocation ret = null;
@@ -2256,6 +2285,7 @@ public class RecipeAdd {
 			i++;
 		}
 		return ret;*/
+		return null;
 	}
 	
 	/**
@@ -2500,6 +2530,57 @@ public class RecipeAdd {
 			UpgradeRecipesMod.log.info("Block OreDict = " + Block + "; Item OreDict = " + itemOreDict + ".");
 		}
 		return Block;
+	}
+	
+	private static void addRecipe(String material, String itemType) {
+		if(itemType.equalsIgnoreCase("pickaxe")) {
+			RecipeAdd.addPickaxeRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("hammer")) {
+			RecipeAdd.addHammerRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("axe")) {
+			RecipeAdd.addAxeRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("shovel")) {
+			RecipeAdd.addShovelRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("excavator")) {
+			RecipeAdd.addExcavatorRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("hoe")) {
+			RecipeAdd.addHoeRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("sickle")) {
+			RecipeAdd.addSickleRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("shears")) {
+			RecipeAdd.addShearsRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("rod")) {
+			RecipeAdd.addRodRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("sword")) {
+			RecipeAdd.addSwordRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("bow")) {
+			RecipeAdd.addBowRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("shield")) {
+			RecipeAdd.addShieldRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("helmet")) {
+			RecipeAdd.addHelmetRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("chestplate")) {
+			RecipeAdd.addChestplateRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("leggings")) {
+			RecipeAdd.addLeggingsRecipe(material);
+		}
+		else if(itemType.equalsIgnoreCase("boots")) {
+			RecipeAdd.addBootsRecipe(material);
+		}
 	}
 	
 }

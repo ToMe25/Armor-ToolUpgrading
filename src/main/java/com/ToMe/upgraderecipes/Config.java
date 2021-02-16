@@ -1,13 +1,31 @@
 package com.ToMe.upgraderecipes;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
 
-public class Config {
+public class Config extends Configuration {
 	
-	protected static Configuration config;
+	//protected static Configuration config;
+	//private static File cfg;
 	
 	//GENERAL
 	public static boolean tools = true;
@@ -16,8 +34,10 @@ public class Config {
 	public static boolean oreDictBoneBlock = true;
 	public static boolean oreDictWool = true;
 	public static boolean lapisDust = false;
+	public static boolean refinedLapis = false;
 	public static boolean netherStarBlock = false;
 	public static boolean dummyItems = true;
+	public static boolean override = true;
 	
 	//SUPPORTED MODS
 	public static final String CATEGORY_MODS = "supported_mods";
@@ -29,7 +49,17 @@ public class Config {
 	public static boolean vanilla = true;
 	public static boolean weapons = true;*/
 	
-	public static final String CATEGORY_AVARITIA = "avaritia_support";
+	public static final String CATEGORY_ITEMS = "upgrading_items";
+	public static Map<String, List<String>> items = new HashMap<String, List<String>>();
+	
+	private static final String[] CommonEnergyKeys = new String[] {"Energy", "energy", "StoredEnergy", "storedEnergy"};
+	private static final NBTTagCompound EnergyNBT;
+	
+	//private static final Map<String, Integer> toolMaterialStrengths = new HashMap<String, Integer>();
+	private static final Map<String, Float> toolMaterialStrengths = new HashMap<String, Float>();
+	private static final DamageTestFakePlayer damageTest = new DamageTestFakePlayer("[UPGRADERECIPES] Damage Test Fake Player");
+	
+	//public static final String CATEGORY_AVARITIA = "avaritia_support";
 	//public static boolean skullfire = true;
 	//public static boolean skullfire_bone_blocks = false;
 	//public static boolean skullfire_netherstar_blocks = false;
@@ -62,8 +92,8 @@ public class Config {
 	//public static boolean infinity_leggings = true;
 	//public static boolean infinity_boots = true;
 	
-	public static final String CATEGORY_DRACONICEVOLUTION = "draconicevolution_support";
-	public static boolean wyvern_fusion = true;
+	//public static final String CATEGORY_DRACONICEVOLUTION = "draconicevolution_support";
+	//public static boolean wyvern_fusion = true;
 	//public static boolean wyvern = true;
 	//public static boolean wyvern_blocks = false;
 	//public static boolean wyvern_pickaxe = true;
@@ -78,7 +108,7 @@ public class Config {
 	//public static boolean wyvern_chestplate = true;
 	//public static boolean wyvern_leggings = true;
 	//public static boolean wyvern_boots = true;
-	public static boolean draconic_staff_all_tools = false;
+	//public static boolean draconic_staff_all_tools = false;
 	//public static boolean draconic = true;
 	//public static boolean draconic_awakened_blocks = false;
 	//public static boolean draconic_pickaxe = true;
@@ -92,13 +122,13 @@ public class Config {
 	//public static boolean draconic_leggings = true;
 	//public static boolean draconic_boots = true;
 	
-	public static final String CATEGORY_MEKANISM = "mekanismtools_support";
-	public static boolean refinedLapis = false;
-	public static boolean lapis_use_ingot = true;
+	//public static final String CATEGORY_MEKANISM = "mekanismtools_support";
+	//public static boolean refinedLapis = false;
+	//public static boolean lapis_use_ingot = true;
 	
-	public static final String CATEGORY_MATTEROVERDRIVE = "mo_support";
+	//public static final String CATEGORY_MATTEROVERDRIVE = "mo_support";
 	
-	public static final String CATEGORY_RUBYMOD = "rubymod_support";
+	//public static final String CATEGORY_RUBYMOD = "rubymod_support";
 	//public static boolean rubyr = true;
 	//public static boolean rubyr_blocks = false;
 	//public static boolean rubyr_pickaxe = true;
@@ -126,7 +156,7 @@ public class Config {
 	//public static boolean emeraldr_leggings = true;
 	//public static boolean emeraldr_boots = true;
 	
-	public static final String CATEGORY_STARS = "stars_support";
+	//public static final String CATEGORY_STARS = "stars_support";
 	//public static boolean netherstar = true;
 	//public static boolean netherstar_blocks = false;
 	//public static boolean netherstar_pickaxe = true;
@@ -141,7 +171,7 @@ public class Config {
 	//public static boolean netherstar_leggings = true;
 	//public static boolean netherstar_boots = true;
 	
-	public static final String CATEGORY_TRIGEMS = "trigems_support";
+	//public static final String CATEGORY_TRIGEMS = "trigems_support";
 	//public static boolean topaz = true;
 	//public static boolean topaz_blocks = false;
 	//public static boolean topaz_pickaxe = true;
@@ -195,7 +225,7 @@ public class Config {
 	//public static boolean emeraldt_leggings = true;
 	//public static boolean emeraldt_boots = true;
 	
-	public static final String CATEGORY_VANILLA = "vanilla_support";
+	//public static final String CATEGORY_VANILLA = "vanilla_support";
 	//public static boolean stone = true;
 	//public static boolean stone_blocks = false;
 	/**USELESS Because Stone has no different block variant.*/
@@ -254,7 +284,7 @@ public class Config {
 	//public static boolean diamond_leggings = true;
 	//public static boolean diamond_boots = true;
 	
-	public static final String CATEGORY_WEAPONS = "weapons_support";
+	//public static final String CATEGORY_WEAPONS = "weapons_support";
 	//public static boolean redcrystal = true;
 	//public static boolean redcrystal_blocks = false;
 	///**USELESS Because RedCrystal has no different block variant.*/
@@ -271,29 +301,55 @@ public class Config {
 	//public static boolean redcrystal_leggings = true;
 	//public static boolean redcrystal_boots = true;
 	
+	static {
+		//File cfg = new File(".", "config");
+		//cfg = new File(cfg.getPath(), UpgradeRecipesMod.MODID + ".cfg");
+		EnergyNBT = new NBTTagCompound();
+		for(String s:CommonEnergyKeys) {
+			//EnergyNBT.setInteger(s, 1000);
+			EnergyNBT.setInteger(s, 1000000);
+		}
+	}
+	
 	public Config() {
-		File cfg = new File(".", "config");
-		cfg = new File(cfg.getPath(), UpgradeRecipesMod.MODID + ".cfg");
-		config = new Configuration(cfg);
-		readConfig();
+		//this(cfg);
+		this(getConfig());
+		//super(cfg);
+		//File cfg = new File(".", "config");
+		//cfg = new File(cfg.getPath(), UpgradeRecipesMod.MODID + ".cfg");
+		//config = new Configuration(cfg);
+		//readConfig();
 	}
 	
 	public Config(File cfg) {
-		config = new Configuration(cfg);
+		//config = new Configuration(cfg);
+		super(cfg);
+		//this.cfg = cfg;
 		readConfig();
+	}
+	
+	public static File getConfig() {
+		File cfg = new File(".", "config");
+		cfg = new File(cfg.getPath(), UpgradeRecipesMod.MODID + ".cfg");
+		return cfg;
 	}
 	
 	/**
 	 * Reads and initializes the Config File.
 	 */
-	public static void readConfig() {
+	//public static void readConfig() {
+	public void readConfig() {
 		try {
-			config.load();
+			//config.load();
+			load();
 			initConfig();
 		} finally {
 			// TODO: handle finally clause
-			if(config.hasChanged()) {
-				config.save();
+			//if(config.hasChanged()) {
+				//config.save();
+			//}
+			if(hasChanged()) {
+				save();
 			}
 		}
 		//checkModsLoaded();
@@ -302,18 +358,41 @@ public class Config {
 	/**
 	 * Initializes the Config Object.
 	 */
-	public static void initConfig() {
-		tools = config.getBoolean("tools", Configuration.CATEGORY_GENERAL, tools, "Enables / Disables the Tools Module.");
-		armor = config.getBoolean("armor", Configuration.CATEGORY_GENERAL, armor, "Enables / Disables the Armor Module.");
-		debug = config.getBoolean("debug", Configuration.CATEGORY_GENERAL, debug, "Enables / Disables some debug Output.");
-		oreDictBoneBlock = config.getBoolean("oreDictBoneBlock", Configuration.CATEGORY_GENERAL, oreDictBoneBlock, "Register Minecraft Bone Blocks to OreDictionary \"blockBone\" or not?(needed for skullfire_1_bone_blocks");
-		oreDictWool = config.getBoolean("oreDictWool", Configuration.CATEGORY_GENERAL, oreDictWool, "Register Minecraft Wool to OreDictionary \"wool\" or not?");
+	//public static void initConfig() {
+	public void initConfig() {
+		//tools = config.getBoolean("tools", Configuration.CATEGORY_GENERAL, tools, "Enables / Disables the Tools Module.");
+		//armor = config.getBoolean("armor", Configuration.CATEGORY_GENERAL, armor, "Enables / Disables the Armor Module.");
+		//debug = config.getBoolean("debug", Configuration.CATEGORY_GENERAL, debug, "Enables / Disables some debug Output.");
+		//oreDictBoneBlock = config.getBoolean("oreDictBoneBlock", Configuration.CATEGORY_GENERAL, oreDictBoneBlock, "Register Minecraft Bone Blocks to OreDictionary \"blockBone\" or not?(needed for skullfire_1_bone_blocks");
+		//oreDictWool = config.getBoolean("oreDictWool", Configuration.CATEGORY_GENERAL, oreDictWool, "Register Minecraft Wool to OreDictionary \"wool\" or not?");
 		//lapisDust = config.getBoolean("lapisDust", Configuration.CATEGORY_GENERAL, lapisDust, "Enables / Disables adding Lapis Dust.(this mod wont add a Recipe for Lapis Dust)(will be forced by refinedLapis and lapis_2_ingot)");
-		lapisDust = config.getBoolean("lapisDust", Configuration.CATEGORY_GENERAL, lapisDust, "Enables / Disables adding Lapis Dust.(this mod wont add a Recipe for Lapis Dust)(will be forced by refinedLapis and lapis_2_ingot if there is no other OreDictionary dustLapis)");
-		netherStarBlock = config.getBoolean("netherStarBlock", Configuration.CATEGORY_GENERAL, netherStarBlock, "Enables / Diables adding a Nether Star Block.(will be forced by skullfire_1_netherstar_blocks if there is no other OReDictionary blockNetherStar)");
-		dummyItems = config.getBoolean("dummyItems", Configuration.CATEGORY_GENERAL, dummyItems, "Enables / Deisables creation of dummy Items for missing but enabled Items.(only Items from loaded Mods will be replaced)");
+		//lapisDust = config.getBoolean("lapisDust", Configuration.CATEGORY_GENERAL, lapisDust, "Enables / Disables adding Lapis Dust.(this mod wont add a Recipe for Lapis Dust)(will be forced by refinedLapis and lapis_2_ingot if there is no other OreDictionary dustLapis)");
+		//netherStarBlock = config.getBoolean("netherStarBlock", Configuration.CATEGORY_GENERAL, netherStarBlock, "Enables / Diables adding a Nether Star Block.(will be forced by skullfire_1_netherstar_blocks if there is no other OReDictionary blockNetherStar)");
+		//dummyItems = config.getBoolean("dummyItems", Configuration.CATEGORY_GENERAL, dummyItems, "Enables / Deisables creation of dummy Items for missing but enabled Items.(only Items from loaded Mods will be replaced)");
 		
-		config.addCustomCategoryComment(CATEGORY_MODS, "Enable / Disable support for any supportet Mod.");
+		override = getBoolean("override", Configuration.CATEGORY_GENERAL, override, "whether this Config File should be ignored and just the new version gets written to this file");
+		if(override) {
+			for(String cat:getCategoryNames()) {
+				removeCategory(getCategory(cat));
+			}
+		}
+		override = getBoolean("override", Configuration.CATEGORY_GENERAL, override, "whether this Config File should be ignored and just the new version gets written to this file");
+		tools = getBoolean("tools", Configuration.CATEGORY_GENERAL, tools, "Enables / Disables the Tools Module.");
+		armor = getBoolean("armor", Configuration.CATEGORY_GENERAL, armor, "Enables / Disables the Armor Module.");
+		debug = getBoolean("debug", Configuration.CATEGORY_GENERAL, debug, "Enables / Disables some debug Output.");
+		oreDictBoneBlock = getBoolean("oreDictBoneBlock", Configuration.CATEGORY_GENERAL, oreDictBoneBlock, "Register Minecraft Bone Blocks to OreDictionary \"blockBone\" or not?(needed for skullfire_1_bone_blocks");
+		oreDictWool = getBoolean("oreDictWool", Configuration.CATEGORY_GENERAL, oreDictWool, "Register Minecraft Wool to OreDictionary \"wool\" or not?");
+		lapisDust = getBoolean("lapisDust", Configuration.CATEGORY_GENERAL, lapisDust, "Enables / Disables adding Lapis Dust.(this mod wont add a Recipe for Lapis Dust)(will be forced by refinedLapis and lapis_2_ingot if there is no other OreDictionary dustLapis)");
+		refinedLapis = getBoolean("refinedLapis", CATEGORY_GENERAL, refinedLapis,  "Enables / Disables adding a Refined Lapis Ingot and Block if Mekanism is loaded.(this will be forced by lapis_2_ingot)(this will force lapisDust if there is no other OreDictionary dustLapis)");
+		netherStarBlock = getBoolean("netherStarBlock", Configuration.CATEGORY_GENERAL, netherStarBlock, "Enables / Disables adding a Nether Star Block.(will be forced by skullfire_1_netherstar_blocks if there is no other OReDictionary blockNetherStar)");
+		dummyItems = getBoolean("dummyItems", Configuration.CATEGORY_GENERAL, dummyItems, "Enables / Disables creation of dummy Items for missing but enabled Items.(only Items from loaded Mods will be replaced)");
+		//override = getBoolean("override", Configuration.CATEGORY_GENERAL, override, "whether this Config File should be ignored and just the new version gets written to this file");
+		
+		addCustomCategoryComment(CATEGORY_MODS, "Enable / Disable support for any supportet Mod.");
+		
+		addCustomCategoryComment(CATEGORY_ITEMS, "All Armors and Tools used for upgrade crafting sorted by their upgrading order.");
+		
+		//config.addCustomCategoryComment(CATEGORY_MODS, "Enable / Disable support for any supportet Mod.");
 		//config.getBoolean("enable_avaritia_support", CATEGORY_MODS, Loader.isModLoaded("avaritia"), "Enables / Disables Avaritia support.");
 		//config.getBoolean("enable_draconicevolution_support", CATEGORY_MODS, Loader.isModLoaded("draconicevolution"), "Enables / Disables Draconic Evolution support.");
 		//config.getBoolean("enable_mekanismtools_support", CATEGORY_MODS, Loader.isModLoaded("mekanismtools"), "Enables / Disables Mekanism Tools support.");
@@ -330,7 +409,7 @@ public class Config {
 		//stars = config.getBoolean("enable_stars_support", CATEGORY_MODS, stars, "Enables / Disables Stars Mod support.");
 		//trigems = config.getBoolean("enable_trigems_support", CATEGORY_MODS, trigems, "Enables / Disables TriGems support.");
 		
-		config.addCustomCategoryComment(CATEGORY_AVARITIA, "Enable / Disable any Part of the Avaritia Integration.");
+		//config.addCustomCategoryComment(CATEGORY_AVARITIA, "Enable / Disable any Part of the Avaritia Integration.");
 		//skullfire = config.getBoolean("skullfire_0_enable", CATEGORY_AVARITIA, skullfire, "Enables / Disables Recipe Changes for Skullfire Tools and Armor.");
 		//skullfire_bone_blocks = config.getBoolean("skullfire_1_bone_blocks", CATEGORY_AVARITIA, skullfire_bone_blocks, "Enables / Disables the use of Bone Blocks to Nerf Skullfire Recipes.");
 		//skullfire_netherstar_blocks = config.getBoolean("skullfire_1_netherstar_blocks", CATEGORY_AVARITIA, skullfire_netherstar_blocks, "Enables / Disables the use of Netherstar Blocks to Nerf Skullfire Recipes.");
@@ -352,8 +431,8 @@ public class Config {
 		//infinity_leggings = config.getBoolean("infinity_leggings", CATEGORY_AVARITIA, infinity_leggings, "Enables / Disables Recipe Changes for the Infinity Leggings.");
 		//infinity_boots = config.getBoolean("infinity_boots", CATEGORY_AVARITIA, infinity_boots, "Enables / Disables Recipe Changes for the Infinity Boots.");
 		
-		config.addCustomCategoryComment(CATEGORY_DRACONICEVOLUTION, "Enable / Disable any Part of the Draconic Evolution Integration.");
-		wyvern_fusion = config.getBoolean("wyvern_2_fusion", CATEGORY_DRACONICEVOLUTION, wyvern_fusion, "Enables / Disables changing the Wyvern Tool and Armor Recipes to Fusion Crafting.");
+		//config.addCustomCategoryComment(CATEGORY_DRACONICEVOLUTION, "Enable / Disable any Part of the Draconic Evolution Integration.");
+		//wyvern_fusion = config.getBoolean("wyvern_2_fusion", CATEGORY_DRACONICEVOLUTION, wyvern_fusion, "Enables / Disables changing the Wyvern Tool and Armor Recipes to Fusion Crafting.");
 		//wyvern = config.getBoolean("wyvern_0_enable", CATEGORY_DRACONICEVOLUTION, wyvern, "Enables / Disables Recipe Changes for Wyvern Tools and Armor.");
 		//wyvern_blocks = config.getBoolean("wyvern_1_blocks", CATEGORY_DRACONICEVOLUTION, wyvern_blocks, "Enables / Disables the use of Blocks to Nerf Wyvern Recipes.");
 		//wyvern_pickaxe = config.getBoolean("wyvern_pickaxe", CATEGORY_DRACONICEVOLUTION, wyvern_pickaxe, "Enables / Disables Recipe Changes for the Wyvern Pickaxe.");
@@ -367,7 +446,7 @@ public class Config {
 		//wyvern_leggings = config.getBoolean("wyvern_leggings", CATEGORY_DRACONICEVOLUTION, wyvern_leggings, "Enables / Disables Recipe Changes for the Wyvern Leggings.");
 		//wyvern_boots = config.getBoolean("wyvern_boots", CATEGORY_DRACONICEVOLUTION, wyvern_boots, "Enables / Disables Recipe Changes for the Wyvern Boots.");
 		
-		draconic_staff_all_tools = config.getBoolean("draconic_2_staff_all_tools", CATEGORY_DRACONICEVOLUTION, draconic_staff_all_tools, "Enables / Disables changing the Draconic Staff of Power Recipe to use all Draconic Tools.");
+		//draconic_staff_all_tools = config.getBoolean("draconic_2_staff_all_tools", CATEGORY_DRACONICEVOLUTION, draconic_staff_all_tools, "Enables / Disables changing the Draconic Staff of Power Recipe to use all Draconic Tools.");//TODO
 		//draconic = config.getBoolean("draconic_0_enable", CATEGORY_DRACONICEVOLUTION, draconic, "Enables / Disables Recipe Changes for Draconic Tools and Armor.");
 		//draconic_awakened_blocks = config.getBoolean("draconic_1_awakened_blocks", CATEGORY_DRACONICEVOLUTION, draconic_awakened_blocks, "Enables / Disables the use of Awakened Blocks to Nerf Draconic Recipes.");
 		//draconic_pickaxe = config.getBoolean("draconic_pickaxe", CATEGORY_DRACONICEVOLUTION, draconic_pickaxe, "Enables / Disables Recipe Changes for the Draconic Pickaxe.");
@@ -381,15 +460,15 @@ public class Config {
 		//draconic_leggings = config.getBoolean("draconic_leggings", CATEGORY_DRACONICEVOLUTION, draconic_leggings, "Enables / Disables Recipe Changes for the Draconic Leggings.");
 		//draconic_boots = config.getBoolean("draconic_boots", CATEGORY_DRACONICEVOLUTION, draconic_boots, "Enables / Disables Recipe Changes for the Draconic Boots.");
 		
-		config.addCustomCategoryComment(CATEGORY_MEKANISM, "Enable / Disable any Part of the Mekanism Tools Integration.");
+		//config.addCustomCategoryComment(CATEGORY_MEKANISM, "Enable / Disable any Part of the Mekanism Tools Integration.");//TODO
 		//refinedLapis = config.getBoolean("refinedLapis", CATEGORY_MEKANISM, refinedLapis, "Enables / Disables adding a Refined Lapis Ingot and Block if Mekanism is loaded.(this will be forced by lapis_2_ingot)(this will force lapisDust)");
-		refinedLapis = config.getBoolean("refinedLapis", CATEGORY_MEKANISM, refinedLapis, "Enables / Disables adding a Refined Lapis Ingot and Block if Mekanism is loaded.(this will be forced by lapis_2_ingot)(this will force lapisDust if there is no other OreDictionary dustLapis)");
+		//refinedLapis = config.getBoolean("refinedLapis", CATEGORY_MEKANISM, refinedLapis, "Enables / Disables adding a Refined Lapis Ingot and Block if Mekanism is loaded.(this will be forced by lapis_2_ingot)(this will force lapisDust if there is no other OreDictionary dustLapis)");
 		//lapis_use_ingot = config.getBoolean("lapis_2_ingot", CATEGORY_MEKANISM, lapis_use_ingot, "Enables / Disables the use of Refined Lapis Ingots to Nerf Lapis Recipes.(this will force refinedLapis and lapisDust");
-		lapis_use_ingot = config.getBoolean("lapis_2_ingot", CATEGORY_MEKANISM, lapis_use_ingot, "Enables / Disables the use of Refined Lapis Ingots to Nerf Lapis Recipes.(this will force refinedLapis)(this will force lapisDust if there is no other OreDictionary dustLapis");
+		//lapis_use_ingot = config.getBoolean("lapis_2_ingot", CATEGORY_MEKANISM, lapis_use_ingot, "Enables / Disables the use of Refined Lapis Ingots to Nerf Lapis Recipes.(this will force refinedLapis)(this will force lapisDust if there is no other OreDictionary dustLapis");
 		
-		config.addCustomCategoryComment(CATEGORY_MATTEROVERDRIVE, "Enable / Disable any Part of the Matter Overdrive Integration.");
+		//config.addCustomCategoryComment(CATEGORY_MATTEROVERDRIVE, "Enable / Disable any Part of the Matter Overdrive Integration.");
 		
-		config.addCustomCategoryComment(CATEGORY_RUBYMOD, "Enable / Disable any Part of the Ruby Mod Integration.");
+		//config.addCustomCategoryComment(CATEGORY_RUBYMOD, "Enable / Disable any Part of the Ruby Mod Integration.");
 		//rubyr = config.getBoolean("ruby_0_enable", CATEGORY_RUBYMOD, rubyr, "Enables / Disables Recipe Changes for Ruby Tools and Armor.");
 		//rubyr_blocks = config.getBoolean("ruby_1_blocks", CATEGORY_RUBYMOD, rubyr_blocks, "Enables / Disables the use of Blocks to Nerf Ruby Recipes.");
 		//rubyr_pickaxe = config.getBoolean("ruby_pickaxe", CATEGORY_RUBYMOD, rubyr_pickaxe, "Enables / Disables Recipe Changes for the Ruby Pickaxe.");
@@ -414,7 +493,7 @@ public class Config {
 		//emeraldr_leggings = config.getBoolean("emerald_leggings", CATEGORY_RUBYMOD, emeraldr_leggings, "Enables / Disables Recipe Changes for the Emerald Leggings.");
 		//emeraldr_boots = config.getBoolean("emerald_boots", CATEGORY_RUBYMOD, emeraldr_boots, "Enables / Disables Recipe Changes for the Emerald Boots.");
 		
-		config.addCustomCategoryComment(CATEGORY_STARS, "Enable / Disable any Part of the Stars Mod Integration.");
+		//config.addCustomCategoryComment(CATEGORY_STARS, "Enable / Disable any Part of the Stars Mod Integration.");
 		//netherstar = config.getBoolean("netherstar_0_enable", CATEGORY_STARS, netherstar, "Enables / Disables Recipe Changes for Netherstar Tools and Armor.");
 		//netherstar_blocks = config.getBoolean("netherstar_1_blocks", CATEGORY_STARS, netherstar_blocks, "Enables / Disables the use of Blocks to Nerf Netherstar Recipes.");
 		//netherstar_pickaxe = config.getBoolean("netherstar_pickaxe", CATEGORY_STARS, netherstar_pickaxe, "Enables / Disables Recipe Changes for the Netherstar Pickaxe.");
@@ -427,7 +506,7 @@ public class Config {
 		//netherstar_leggings = config.getBoolean("netherstar_leggings", CATEGORY_STARS, netherstar_leggings, "Enables / Disables Recipe Changes for the Netherstar Leggings.");
 		//netherstar_boots = config.getBoolean("netherstar_boots", CATEGORY_STARS, netherstar_boots, "Enables / Disables Recipe Changes for the Netherstar Boots.");
 		
-		config.addCustomCategoryComment(CATEGORY_TRIGEMS, "Enable / Disable any Part of the TriGems Integration.");
+		//config.addCustomCategoryComment(CATEGORY_TRIGEMS, "Enable / Disable any Part of the TriGems Integration.");
 		//topaz = config.getBoolean("topaz_0_enable", CATEGORY_TRIGEMS, topaz, "Enables / Disables Recipe Changes for Topaz Tools and Armor.");
 		//topaz_blocks = config.getBoolean("topaz_1_blocks", CATEGORY_TRIGEMS, topaz_blocks, "Enables / Disables the use of Blocks to Nerf Topaz Recipes.");
 		//topaz_pickaxe = config.getBoolean("topaz_pickaxe", CATEGORY_TRIGEMS, topaz_pickaxe, "Enables / Disables Recipe Changes for the Topaz Pickaxe.");
@@ -476,7 +555,7 @@ public class Config {
 		//emeraldt_leggings = config.getBoolean("emerald_leggings", CATEGORY_TRIGEMS, emeraldt_leggings, "Enables / Disables Recipe Changes for the Emerald Leggings.");
 		//emeraldt_boots = config.getBoolean("emerald_boots", CATEGORY_TRIGEMS, emeraldt_boots, "Enables / Disables Recipe Changes for the Emerald Boots.");
 		
-		config.addCustomCategoryComment(CATEGORY_VANILLA, "Enable / Disable any Part of the Vanilla Integration.");
+		//config.addCustomCategoryComment(CATEGORY_VANILLA, "Enable / Disable any Part of the Vanilla Integration.");
 		//stone = config.getBoolean("stone_0_enable", CATEGORY_VANILLA, stone, "Enables / Disables Recipe Changes for Stone Tools and Armor.");
 		//stone_pickaxe = config.getBoolean("stone_pickaxe", CATEGORY_VANILLA, stone_pickaxe, "Enables / Disables Recipe Changes for the Stone Pickaxe.");
 		//stone_axe = config.getBoolean("stone_axe", CATEGORY_VANILLA, stone_axe, "Enables / Disables Recipe Changes for the Stone Axe.");
@@ -526,7 +605,7 @@ public class Config {
 		//diamond_leggings = config.getBoolean("diamond_leggings", CATEGORY_VANILLA, diamond_leggings, "Enables / Disables Recipe Changes for the Diamond Leggings.");
 		//diamond_boots = config.getBoolean("diamond_boots", CATEGORY_VANILLA, diamond_boots, "Enables / Disables Recipe Changes for the Diamond Boots.");
 		
-		config.addCustomCategoryComment(CATEGORY_WEAPONS, "Enable / Disable any Part of the New Weapons Mod Integration.");
+		//config.addCustomCategoryComment(CATEGORY_WEAPONS, "Enable / Disable any Part of the New Weapons Mod Integration.");
 		//redcrystal = config.getBoolean("redcrystal_0_enable", CATEGORY_WEAPONS, redcrystal, "Enables / Disables Recipe Changes for RedCrystal Tools and Armor.");
 		//redcrystal_blocks = config.getBoolean("redcrystal_1_blocks", CATEGORY_VANILLA, redcrystal_blocks, "Enables / Disables the use of Blocks to Nerf RedCrystal Recipes.");
 		//redcrystal_pickaxe = config.getBoolean("redcrystal_pickaxe", CATEGORY_WEAPONS, redcrystal_pickaxe, "Enables / Disables Recipe Changes for the RedCrystal Pickaxe.");
@@ -539,13 +618,13 @@ public class Config {
 		//redcrystal_leggings = config.getBoolean("redcrystal_leggings", CATEGORY_VANILLA, redcrystal_leggings, "Enables / Disables Recipe Changes for the RedCrystal Leggings.");
 		//redcrystal_boots = config.getBoolean("redcrystal_boots", CATEGORY_VANILLA, redcrystal_boots, "Enables / Disables Recipe Changes for the RedCrystal Boots.");
 		
-		if(!UpgradeRecipesCommonProxy.isModLoaded("Mekanism")) {
-			lapis_use_ingot = false;
-			refinedLapis = false;
-		}
-		if(lapis_use_ingot) {
-			refinedLapis = true;
-		}
+		//if(!UpgradeRecipesCommonProxy.isModLoaded("Mekanism")) {
+			//lapis_use_ingot = false;
+			//refinedLapis = false;//TODO
+		//}
+		//if(lapis_use_ingot) {
+			//refinedLapis = true;
+		//}
 		//if(refinedLapis) {
 			//lapisDust = true;
 		//}
@@ -592,10 +671,14 @@ public class Config {
 	}*/
 	
 	public boolean isModEnabled(String modid) {
-		boolean enabled = config.getBoolean("enable_" + modid + "_support", CATEGORY_MODS, true, "Enables / Disables " + modid + " support.");
-		if(config.hasChanged()) {
-			config.save();
+		boolean enabled = getBoolean("enable_" + modid + "_support", CATEGORY_MODS, true, "Enables / Disables " + modid + " support.");
+		if(hasChanged()) {
+			save();
 		}
+		//boolean enabled = config.getBoolean("enable_" + modid + "_support", CATEGORY_MODS, true, "Enables / Disables " + modid + " support.");
+		//if(config.hasChanged()) {
+			//config.save();
+		//}
 		//if(Loader.isModLoaded(modid) && enabled) {
 		//if((Loader.isModLoaded(modid) || modid.equalsIgnoreCase("vanilla")) && enabled) {
 		//if((Loader.isModLoaded(modid) || Loader.isModLoaded(modid.toLowerCase()) || modid.equalsIgnoreCase("vanilla")) && enabled) {
@@ -611,20 +694,28 @@ public class Config {
 	}
 	
 	public boolean isMaterialEnabled(String name, String modid) {
-		boolean enabled = isModEnabled(modid) && config.getBoolean(name + "_0_enable", modid + "_support", true, "Enables / Disables Recipe Changes for " + name + " Tools and Armor.");
-		if(config.hasChanged()) {
-			config.save();
+		boolean enabled = isModEnabled(modid) && getBoolean(name + "_0_enable", modid + "_support", true, "Enables / Disables Recipe Changes for " + name + " Tools and Armor.");
+		if(hasChanged()) {
+			save();
 		}
+		//boolean enabled = isModEnabled(modid) && config.getBoolean(name + "_0_enable", modid + "_support", true, "Enables / Disables Recipe Changes for " + name + " Tools and Armor.");
+		//if(config.hasChanged()) {
+			//config.save();
+		//}
 		return enabled;
 		//return isModEnabled(modid) && config.getBoolean(name + "_0_enable", modid + "_support", true, "Enables / Disables Recipe Changes for " + name + " Tools and Armor.");
 	}
 	
 	public boolean isToolEnabled(String material, String type, String modid) {
-		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_type", modid + "_support", true, "Enables / Disables Recipe Changes for the " + material + " " + type + ".");
-		boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_" + type, modid + "_support", true, "Enables / Disables Recipe Changes for the " + material + " " + type + ".");
-		if(config.hasChanged()) {
-			config.save();
+		boolean enabled = isMaterialEnabled(material, modid) && getBoolean(material + "_" + type, modid + "_support", true, "Enables / Disables Recipe Changes for the " + material + " " + type + ".");
+		if(hasChanged()) {
+			save();
 		}
+		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_type", modid + "_support", true, "Enables / Disables Recipe Changes for the " + material + " " + type + ".");
+		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_" + type, modid + "_support", true, "Enables / Disables Recipe Changes for the " + material + " " + type + ".");
+		//if(config.hasChanged()) {
+			//config.save();
+		//}
 		String[] tools = new String[] {"staff", "pickaxe", "axe", "shovel", "hoe", "sword", "bow"};
 		for(String t:tools) {
 			if(type.equalsIgnoreCase(t) && !this.tools) {
@@ -654,7 +745,14 @@ public class Config {
 	 */
 	public boolean blockEnabled(String material, String blockName) {
 		//String modid = Materials.valueOf(material).getMod();
-		String modid = Materials.valueOf(material.toUpperCase()).getMod();
+		//String modid = Materials.valueOf(material.toUpperCase()).getMod();
+		if(!material.contains("_")) {
+			if(debug) {
+				UpgradeRecipesMod.log.warn("blockEnabled got called with invalid material \"" + material + "\"!");
+			}
+			return false;
+		}
+		String modid = material.substring(0, material.lastIndexOf("_"));
 		return blockEnabled(modid, material, blockName);
 	}
 	
@@ -666,14 +764,510 @@ public class Config {
 	 * @return
 	 */
 	public boolean blockEnabled(String modid, String material, String blockName) {
+		boolean enabled = isMaterialEnabled(material, modid) && getBoolean(material + "_1_" + (blockName == null || blockName == "" ? "" : blockName) + "blocks", modid + "_support", false, "Enables / Disables the use of " + (blockName == null || blockName == "" ? "" : ((blockName.endsWith("_") ? blockName.substring(0, blockName.length() - 1) : blockName) + " ")) + "Blocks to Nerf " + material + " Recipes.");
+		if(hasChanged()) {
+			save();
+		}
 		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_1_" + blockName == null ? "" : blockName + "blocks", modid + "_support", true, "Enables / Disables the use of " + (blockName == null ? "" : (blockName.substring(0, blockName.length() - 1) + " ")) + "Blocks to Nerf Wyvern Recipes.");
 		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_1_" + blockName == null ? "" : blockName + "blocks", modid + "_support", false, "Enables / Disables the use of " + (blockName == null || blockName == "" ? "" : ((blockName.endsWith("_") ? blockName.substring(0, blockName.length() - 1) : blockName) + " ")) + "Blocks to Nerf Wyvern Recipes.");
 		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_1_" + (blockName == null || blockName == "" ? "" : blockName) + "blocks", modid + "_support", false, "Enables / Disables the use of " + (blockName == null || blockName == "" ? "" : ((blockName.endsWith("_") ? blockName.substring(0, blockName.length() - 1) : blockName) + " ")) + "Blocks to Nerf Wyvern Recipes.");
-		boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_1_" + (blockName == null || blockName == "" ? "" : blockName) + "blocks", modid + "_support", false, "Enables / Disables the use of " + (blockName == null || blockName == "" ? "" : ((blockName.endsWith("_") ? blockName.substring(0, blockName.length() - 1) : blockName) + " ")) + "Blocks to Nerf " + material + " Recipes.");
-		if(config.hasChanged()) {
-			config.save();
-		}
+		//boolean enabled = isMaterialEnabled(material, modid) && config.getBoolean(material + "_1_" + (blockName == null || blockName == "" ? "" : blockName) + "blocks", modid + "_support", false, "Enables / Disables the use of " + (blockName == null || blockName == "" ? "" : ((blockName.endsWith("_") ? blockName.substring(0, blockName.length() - 1) : blockName) + " ")) + "Blocks to Nerf " + material + " Recipes.");
+		//if(config.hasChanged()) {
+			//config.save();
+		//}
 		return enabled;
+	}
+	
+	public void initItemMap() {
+		if(override) {
+			ItemFinder.findItems();
+			//List<String> list = new ArrayList<String>();
+			//Map<Integer, List<ItemArmor>> sortMapArmor = new TreeMap<Integer, List<ItemArmor>>();
+			//for(ItemArmor item:ItemFinder.Helmets) {
+				//int armorValue = item.getArmorMaterial().getDamageReductionAmount(EntityEquipmentSlot.HEAD);
+				//List<ItemArmor> equal = new ArrayList<ItemArmor>();
+				//if(sortMapArmor.containsKey(armorValue)) {
+					//equal = sortMapArmor.get(armorValue);
+				//}
+				//equal.add(item);
+				//sortMapArmor.put(armorValue, equal);
+			//}
+			//items.put("helmets", sortArmors(EntityEquipmentSlot.HEAD, ItemFinder.Helmets));
+			//items.put("chestplates", sortArmors(EntityEquipmentSlot.CHEST, ItemFinder.Chestplates));
+			//items.put("leggings", sortArmors(EntityEquipmentSlot.LEGS, ItemFinder.Leggings));
+			//items.put("boots", sortArmors(EntityEquipmentSlot.FEET, ItemFinder.Boots));
+			Map<String, List<String>> armors = sortArmors(ItemFinder.Helmets, ItemFinder.Chestplates, ItemFinder.Leggings, ItemFinder.Boots);
+			items.put("helmets", armors.get("helmets"));
+			items.put("chestplates", armors.get("chestplates"));
+			items.put("leggings", armors.get("leggings"));
+			items.put("boots", armors.get("boots"));
+			//items.put("pickaxes", sortTools(ItemFinder.Pickaxes));
+			//items.put("axes", sortTools(ItemFinder.Axes));
+			//items.put("shovels", sortTools(ItemFinder.Shovels));
+			//items.put("shovels", sortTools(ItemFinder.Hoes));
+			items.put("pickaxes", sortTools(ItemFinder.Pickaxes, "pickaxe"));
+			items.put("axes", sortTools(ItemFinder.Axes, "axe"));
+			items.put("shovels", sortTools(ItemFinder.Shovels, "shovel"));
+			items.put("hoes", sortTools(ItemFinder.Hoes, "hoe"));
+			for(String str:items.keySet()) {
+				getStringList(str, CATEGORY_ITEMS, items.get(str).toArray(new String[0]), "The Order of all " + str);
+			}
+		}
+		else {
+			for(Property prop:getCategory(CATEGORY_ITEMS).values()) {
+				List<String> list = new ArrayList<String>();
+				for(String str:prop.getStringList()) {
+					list.add(str);
+				}
+				items.put(prop.getName(), list);
+			}
+		}
+		if(hasChanged()) {
+			save();
+		}
+	}
+	
+	//private List<String> sortArmors(EntityEquipmentSlot slot, List<ItemArmor> toSort) {
+	private Map<String, List<String>> sortArmors(List<ItemArmor> helmets, List<ItemArmor> chestplates, List<ItemArmor> leggings, List<ItemArmor> boots) {
+		Map<String, List<String>> sorted = new HashMap<String, List<String>>();
+		List<String> helmetsSorted = new ArrayList<String>();
+		List<String> chestplatesSorted = new ArrayList<String>();
+		List<String> leggingsSorted = new ArrayList<String>();
+		List<String> bootsSorted = new ArrayList<String>();
+		int length = helmets.size();
+		if(chestplates.size() > length) {
+			length = chestplates.size();
+		}
+		if(leggings.size() > length) {
+			length = leggings.size();
+		}
+		if(boots.size() > length) {
+			length = boots.size();
+		}
+		Map<String, Map<String, ItemArmor>> armorSets = new HashMap<String, Map<String,ItemArmor>>();
+		int i = 0;
+		while(i < length) {
+			if(helmets.size() > i) {
+				ItemArmor helmet = helmets.get(i);
+				String material = ItemFinder.getMaterial(helmet.getRegistryName(), "helmet");
+				Map<String, ItemArmor> mat;
+				if(armorSets.containsKey(material)) {
+					mat = armorSets.get(material);
+				}
+				else {
+					mat = new HashMap<String, ItemArmor>();
+				}
+				mat.put("helmet", helmet);
+				armorSets.put(material, mat);
+			}
+			if(chestplates.size() > i) {
+				ItemArmor chestplate = chestplates.get(i);
+				String material = ItemFinder.getMaterial(chestplate.getRegistryName(), "chestplate");
+				Map<String, ItemArmor> mat;
+				if(armorSets.containsKey(material)) {
+					mat = armorSets.get(material);
+				}
+				else {
+					mat = new HashMap<String, ItemArmor>();
+				}
+				mat.put("chestplate", chestplate);
+				armorSets.put(material, mat);
+			}
+			if(leggings.size() > i) {
+				ItemArmor legs = leggings.get(i);
+				String material = ItemFinder.getMaterial(legs.getRegistryName(), "leggings");
+				Map<String, ItemArmor> mat;
+				if(armorSets.containsKey(material)) {
+					mat = armorSets.get(material);
+				}
+				else {
+					mat = new HashMap<String, ItemArmor>();
+				}
+				mat.put("leggings", legs);
+				armorSets.put(material, mat);
+			}
+			if(boots.size() > i) {
+				ItemArmor feet = boots.get(i);
+				String material = ItemFinder.getMaterial(feet.getRegistryName(), "boots");
+				Map<String, ItemArmor> mat;
+				if(armorSets.containsKey(material)) {
+					mat = armorSets.get(material);
+				}
+				else {
+					mat = new HashMap<String, ItemArmor>();
+				}
+				mat.put("boots", feet);
+				armorSets.put(material, mat);
+			}
+			i++;
+		}
+		//Map<Double, List<String>> materials = new TreeMap<Double, List<String>>();
+		Map<Double, Map<Float, List<String>>> materials = new TreeMap<Double, Map<Float,List<String>>>();
+		for(String mat:armorSets.keySet()) {
+			Map<String, ItemArmor> set = armorSets.get(mat);
+			//double damage = damageTest.getDamage(set.get("helmet"), set.get("chestplate"), set.get("leggings"), set.get("boots"));
+			double damage = damageTest.getDamage(getStackWithEnergy(set.get("helmet")), getStackWithEnergy(set.get("chestplate")), getStackWithEnergy(set.get("leggings")), getStackWithEnergy(set.get("boots")));
+			//List<String> equalDamage;
+			Map<Float, List<String>> equalDamage;
+			if(materials.containsKey(damage)) {
+				equalDamage = materials.get(damage);
+			}
+			else {
+				//equalDamage = new ArrayList<String>();
+				equalDamage = new TreeMap<Float, List<String>>();
+			}
+			float toughness = 0;
+			if(set.containsKey("helmet")) {
+				toughness += set.get("helmet").toughness;
+			}
+			if(set.containsKey("chestplate")) {
+				toughness += set.get("chestplate").toughness;
+			}
+			if(set.containsKey("leggings")) {
+				toughness += set.get("leggings").toughness;
+			}
+			if(set.containsKey("helmet")) {
+				toughness += set.get("boots").toughness;
+			}
+			toughness /= 4;
+			List<String> equalToughness;
+			if(equalDamage.containsKey(toughness)) {
+				equalToughness = equalDamage.get(toughness);
+			}
+			else {
+				equalToughness = new ArrayList<String>();
+			}
+			equalToughness.add(mat);
+			if(!equalDamage.containsKey(toughness)) {
+				equalDamage.put(toughness, equalToughness);
+			}
+			if(!materials.containsKey(damage)) {
+				materials.put(damage, equalDamage);
+			}
+			//equalDamage.add(mat);
+			//equalDamage.add(set.get("chestplate").toughness + ";" + mat);
+			//materials.put(damage, equalDamage);
+		}
+		for(double dmg:materials.keySet()) {
+			//List<String> mats = materials.get(dmg);
+			//Collections.sort(mats);
+			//Collections.reverse(mats);
+			//for(String mat:mats) {
+				//mat = mat.substring(mat.indexOf(";") + 1);
+				//Map<String, ItemArmor> set = armorSets.get(mat);
+				//helmetsSorted.add(set.get("helmet").getRegistryName().toString());
+				//chestplatesSorted.add(set.get("chestplate").getRegistryName().toString());
+				//leggingsSorted.add(set.get("leggings").getRegistryName().toString());
+				//bootsSorted.add(set.get("boots").getRegistryName().toString());
+			//}
+			Map<Float, List<String>> equalDamage = materials.get(dmg);
+			for(float toughness:equalDamage.keySet()) {
+				List<String> equalToughness = equalDamage.get(toughness);
+				Collections.sort(equalToughness);
+				for(String mat:equalToughness) {
+					Map<String, ItemArmor> set = armorSets.get(mat);
+					helmetsSorted.add(set.get("helmet").getRegistryName().toString());
+					chestplatesSorted.add(set.get("chestplate").getRegistryName().toString());
+					leggingsSorted.add(set.get("leggings").getRegistryName().toString());
+					bootsSorted.add(set.get("boots").getRegistryName().toString());
+				}
+			}
+		}
+		Collections.reverse(helmetsSorted);
+		Collections.reverse(chestplatesSorted);
+		Collections.reverse(leggingsSorted);
+		Collections.reverse(bootsSorted);
+		sorted.put("helmets", helmetsSorted);
+		sorted.put("chestplates", chestplatesSorted);
+		sorted.put("leggings", leggingsSorted);
+		sorted.put("boots", bootsSorted);
+		//List<String> list = new ArrayList<String>();
+		//Map<Integer, Map<Float, Map<Integer, Map<String, ItemArmor>>>> sortMapArmor = new TreeMap<Integer, Map<Float, Map<Integer, Map<String, ItemArmor>>>>();
+		//Map<Integer, Map<Float, Map<Integer, List<String>>>> sortMapArmor = new TreeMap<Integer, Map<Float, Map<Integer, List<String>>>>();
+		//for(ItemArmor item:toSort) {
+			//int armorValue = item.getArmorMaterial().getDamageReductionAmount(slot);
+			//float armorToughness = item.getArmorMaterial().getToughness();
+			//int armorDurability = item.getArmorMaterial().getDurability(slot);
+			//Map<Float, Map<Integer, Map<String, ItemArmor>>> equalArmor = new TreeMap<Float, Map<Integer, Map<String, ItemArmor>>>();
+			//Map<Float, Map<Integer, List<String>>> equalArmor = new TreeMap<Float, Map<Integer, List<String>>>();
+			//Map<Integer, Map<String, ItemArmor>> equalToughness = new TreeMap<Integer, Map<String, ItemArmor>>();
+			//Map<Integer, List<String>> equalToughness = new TreeMap<Integer, List<String>>();
+			//Map<String, ItemArmor> equalDurability = new TreeMap<String, ItemArmor>();
+			//List<String> equalDurability = new ArrayList<String>();
+			//if(sortMapArmor.containsKey(armorValue)) {
+				//equalArmor = sortMapArmor.get(armorValue);
+				//if(equalArmor.containsKey(armorToughness)) {
+					//equalToughness = equalArmor.get(armorToughness);
+					//if(equalToughness.containsKey(armorDurability)) {
+						//equalDurability = equalToughness.get(armorDurability);
+					//}
+				//}
+			//}
+			//equalDurability.put(item.getRegistryName().toString(), item);
+			//equalDurability.add(item.getRegistryName().toString());
+			//if(!equalToughness.containsKey(armorDurability)) {
+				//equalToughness.put(armorDurability, equalDurability);
+				//if(!equalArmor.containsKey(armorToughness)) {
+					//equalArmor.put(armorToughness, equalToughness);
+					//if(!sortMapArmor.containsKey(armorValue)) {
+						//sortMapArmor.put(armorValue, equalArmor);
+					//}
+				//}
+			//}
+			//sortMapArmor.put(armorValue, equalArmor);
+		//}
+		//for(Map<Float, Map<Integer, Map<String, ItemArmor>>> equalArmor:sortMapArmor.values()) {
+			//for(Map<Integer, Map<String, ItemArmor>> equalToughness:equalArmor.values()) {
+				//for(Map<String, ItemArmor> equalDurability:equalToughness.values()) {
+					//for(String armor:equalDurability.keySet()) {
+						//list.add(armor);
+					//}
+				//}
+			//}
+		//}
+		//for(Map<Float, Map<Integer, List<String>>> equalArmor:sortMapArmor.values()) {
+			//for(Map<Integer, List<String>> equalToughness:equalArmor.values()) {
+				//for(List<String> equalDurability:equalToughness.values()) {
+					//Collections.sort(equalDurability);
+					//for(String armor:equalDurability) {
+						//list.add(armor);
+					//}
+					//list.addAll(equalDurability);
+				//}
+			//}
+		//}
+		//return list;
+		return sorted;
+	}
+	
+	//private List<String> sortTools(List<ItemTool> toSort) {
+	//private List<String> sortTools(List<Item> toSort) {
+	private List<String> sortTools(List<Item> toSort, String ItemType) {
+		List<String> list = new ArrayList<String>();
+		//Map<Integer, Map<Float, Map<Float, Map<Integer, List<String>>>>> sortMapTool = new TreeMap<Integer, Map<Float, Map<Float, Map<Integer, List<String>>>>>();
+		//Map<Float, Map<Integer, Map<Float, Map<Integer, List<String>>>>> sortMapTool = new TreeMap<Float, Map<Integer, Map<Float, Map<Integer, List<String>>>>>();
+		Map<Float, List<String>> sortMap = new TreeMap<Float, List<String>>();
+		//for(ItemTool item:toSort) {
+		for(Item item:toSort) {
+			ResourceLocation registryName = item.getRegistryName();
+			String material = ItemFinder.getMaterial(registryName, ItemType);
+			if(!toolMaterialStrengths.containsKey(material)) {
+				HashMap<String, HashMap<Float, Integer>> strengths = new HashMap<String, HashMap<Float,Integer>>();
+				for(Item itm:ItemFinder.Tools) {
+					ItemStack stack = getStackWithEnergy(itm);
+					int harvestLevel = itm.getHarvestLevel(stack, ItemType, null, null);
+					float attackDamage = 1.0F;
+					//float attack2 = 0.0F;//operation 2
+					float attackDmg2 = 0.0F;//operation 2
+					for(AttributeModifier mod:itm.getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack).get("generic.attackDamage")) {
+						switch (mod.getOperation()) {
+							case 0:
+								attackDamage += mod.getAmount();
+								break;
+							case 1:
+								attackDamage += mod.getAmount();//as the base value for attack is 1 operation 1 would be attackDamage += 1 x mod.getAmount() so i can just add it.
+								break;
+							case 2:
+								//attack2 += mod.getAmount();
+								attackDmg2 += mod.getAmount();
+								break;
+						}
+								
+					}
+					//attackDamage += attackDamage * attack2;
+					attackDamage += attackDamage * attackDmg2;
+					float attackSpeed = 4.0F;
+					float attackSpd1 = 0.0F;//operation 1
+					float attackSpd2 = 0.0F;//operation 2
+					for(AttributeModifier mod:itm.getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack).get("generic.attackSpeed")) {
+						switch (mod.getOperation()) {
+							case 0:
+								attackSpeed += mod.getAmount();
+								break;
+							case 1:
+								attackSpd1 += mod.getAmount();
+								break;
+							case 2:
+								attackSpd2 += mod.getAmount();
+								break;
+						}
+								
+					}
+					attackSpeed += 4 * attackSpd1;
+					attackSpeed += attackSpeed * attackSpd2;
+					float miningSpeed = itm.getStrVsBlock(stack, Blocks.COBBLESTONE.getDefaultState());
+					int enchantability = itm.getItemEnchantability(stack);
+					int durability = stack.getMaxDamage();
+					float strength = 0;
+					//strength += harvestLevel * 2;
+					strength += harvestLevel * 1.6;
+					//strength += harvestLevel * 1.5;
+					//strength += attackDamage * 1;
+					strength += attackDamage * 0.8;
+					strength += attackSpeed * 0.5;
+					//strength += miningSpeed * 1;
+					strength += miningSpeed * 1.2;
+					//strength += enchantability * 1;
+					//strength += enchantability * 0.5;
+					//strength += enchantability * 0.25;
+					strength += enchantability * 0.1;
+					strength += durability * 0.001;
+					//String mat = ItemFinder.getMaterial(itm.getRegistryName(), ItemType);
+					String mat = ItemFinder.getMaterial(itm.getRegistryName(), ItemFinder.getItemType(itm));
+					HashMap<Float, Integer> str;
+					//float oldStrength = 0;
+					//int oldCount = 0;
+					int count = 1;
+					//if(strengths.containsKey(material)) {
+						//str = strengths.get(material);
+					if(strengths.containsKey(mat)) {
+						str = strengths.get(mat);
+						for(float f:str.keySet()) {
+							//oldStrength = f;
+							strength += f;
+							//oldCount = str.get(f);
+							count += str.get(f);
+							str.remove(f);
+						}
+					}
+					else {
+						str = new HashMap<Float, Integer>();
+					}
+					//str.put(oldStrength + strength, oldCount + 1);
+					str.put(strength, count);
+					//strengths.put(material, str);
+					strengths.put(mat, str);
+				}
+				for(String mat:strengths.keySet()) {
+					Map<Float, Integer> strength = strengths.get(mat);
+					//for(float strength:strengths.get(mat).keySet()) {
+					for(float str:strength.keySet()) {
+						//toolMaterialStrengths.put(mat, strength / strengths.get(mat).get(strength));
+						toolMaterialStrengths.put(mat, str / strength.get(str));
+					}
+				}
+			}
+			float strength = toolMaterialStrengths.get(material);
+			//Map<Float, List<String>> sortMap = new TreeMap<Float, List<String>>();
+			List<String> equalStrength = new ArrayList<String>();
+			if(sortMap.containsKey(strength)) {
+				equalStrength = sortMap.get(strength);
+			}
+			equalStrength.add(registryName.toString());
+			Collections.sort(equalStrength);
+			sortMap.put(strength, equalStrength);
+			//ItemStack stack = new ItemStack(item);
+			//ItemStack stack = getStackWithEnergy(item);
+			//int harvestLevel = item.getToolMaterial().getHarvestLevel();
+			//int harvestLevel = item.getHarvestLevel(stack, ItemType, null, null);
+			//float attackDamage = 0.0F;
+			//float attackDamage = 1.0F;
+			//float attack1 = 0.0F;//operation 1
+			//float attack2 = 0.0F;//operation 2
+			//for(AttributeModifier mod:item.getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack).get("attackDamage")) {
+			//for(AttributeModifier mod:item.getAttributeModifiers(EntityEquipmentSlot.MAINHAND, stack).get("generic.attackDamage")) {
+				//attackDamage += mod.getAmount();
+				//if(mod.getAmount() <= 0) {
+					//continue;//due to unfinished calculation this could set things to 0 that shouldn't be 0.
+				//}
+				//switch (mod.getOperation()) {
+					//case 0:
+						//attackDamage += mod.getAmount();
+						//break;
+					//case 1:
+						//attackDamage *= mod.getAmount();
+						//attack1 += mod.getAmount();
+						//attackDamage += mod.getAmount();//as the base value for attack is 1.0F operation 1 would be attackDamage += 1.0F x mod.getAmount() so i can just add it
+						//break;
+					//case 2:
+						//attackDamage *= mod.getAmount();
+						//attack2 += mod.getAmount();
+						//break;
+				//}
+						
+			//}
+			//attackDamage += 1.0F * attack1;
+			//attackDamage += attack1;
+			//attackDamage *= attack2;
+			//attackDamage += attackDamage * attack2;
+			//float attackDamage = item.getToolMaterial().getDamageVsEntity();
+			//float miningSpeed = item.getToolMaterial().getEfficiencyOnProperMaterial();
+			//float miningSpeed = item.getStrVsBlock(stack, Blocks.COBBLESTONE.getDefaultState());
+			//int durability = item.getMaxDamage(stack);
+			//int durability = stack.getMaxDamage();
+			//int durability = item.getToolMaterial().getMaxUses();
+			//float strength = 0;
+			//Map<Float, Map<Float, Map<Integer, List<String>>>> equalDamage = new TreeMap<Float, Map<Float, Map<Integer, List<String>>>>();
+			//Map<Integer, Map<Float, Map<Integer, List<String>>>> equalDamage = new TreeMap<Integer, Map<Float, Map<Integer, List<String>>>>();
+			//Map<Float, Map<Integer, List<String>>> equalLevel = new TreeMap<Float, Map<Integer, List<String>>>();
+			//Map<Integer, List<String>> equalSpeed = new TreeMap<Integer, List<String>>();
+			//List<String> equalDurability = new ArrayList<String>();
+			//if(sortMapTool.containsKey(attackDamage)) {
+			//if(sortMapTool.containsKey(harvestLevel)) {
+				//equalDamage = sortMapTool.get(harvestLevel);
+				//equalDamage = sortMapTool.get(attackDamage);
+				//if(equalDamage.containsKey(harvestLevel)) {
+				//if(equalDamage.containsKey(attackDamage)) {
+					//equalLevel = equalDamage.get(attackDamage);
+					//equalLevel = equalDamage.get(harvestLevel);
+					//if(equalLevel.containsKey(miningSpeed)) {
+						//equalSpeed = equalLevel.get(miningSpeed);
+						//if(equalSpeed.containsKey(durability)) {
+							//equalDurability = equalSpeed.get(durability);
+						//}
+					//}
+				//}
+			//}
+			//equalDurability.add(item.getRegistryName().toString());
+			//if(!equalSpeed.containsKey(durability)) {
+				//equalSpeed.put(durability, equalDurability);
+				//if(!equalLevel.containsKey(miningSpeed)) {
+					//equalLevel.put(miningSpeed, equalSpeed);
+					//if(!equalDamage.containsKey(attackDamage)) {
+						//equalDamage.put(attackDamage, equalLevel);
+						//if(!sortMapTool.containsKey(harvestLevel)) {
+							//sortMapTool.put(harvestLevel, equalDamage);
+						//}
+					//}
+					//if(!equalDamage.containsKey(harvestLevel)) {
+						//equalDamage.put(harvestLevel, equalLevel);
+						//if(!sortMapTool.containsKey(attackDamage)) {
+							//sortMapTool.put(attackDamage, equalDamage);
+						//}
+					//}
+				//}
+			//}
+		}
+		for(float strength:sortMap.keySet()) {
+			for(String tool:sortMap.get(strength)) {
+				list.add(tool);
+			}
+		}
+		//for(Map<Float, Map<Float, Map<Integer, List<String>>>> equalLevel:sortMapTool.values()) {
+		//for(Map<Integer, Map<Float, Map<Integer, List<String>>>> equalLevel:sortMapTool.values()) {
+			//for(Map<Float, Map<Integer, List<String>>> equalDamage:equalLevel.values()) {
+				//for(Map<Integer, List<String>> equalSpeed:equalDamage.values()) {
+					//for(List<String> equalDurability:equalSpeed.values()) {
+						//Collections.sort(equalDurability);
+						//list.addAll(equalDurability);
+					//}
+				//}
+			//}
+		//}
+		return list;
+	}
+	
+	//private ItemStack getStackWithEnergy(Item item) {
+	protected static ItemStack getStackWithEnergy(Item item) {
+		//String[] commonEnergyKeys = new String[] {"Energy", "energy", "StoredEnergy", "storedEnergy"};
+		//NBTTagCompound energyNBT = new NBTTagCompound();
+		//for(String s:commonEnergyKeys) {
+			//energyNBT.setInteger(s, 1000);
+		//}
+		ItemStack stack = new ItemStack(item, 0, 1);
+		//stack.setTagCompound(energyNBT);
+		stack.setTagCompound(EnergyNBT);
+		return stack;
 	}
 	
 }
