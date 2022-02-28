@@ -62,6 +62,8 @@ dependencies {
         //exclude module: "CodeChickenLib"
     }
     
+    provided "cofh:ThermalFoundation:${minecraft_version}-${thermal_foundation_version}:deobf"
+    
     //provided "mekanism:Mekanism-$minecraft_version:$mekanism_version:api"
     
     //provided "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:deobf";
@@ -85,6 +87,10 @@ repositories {
         //name "Curseforge Maven"
         //url "https://minecraft.curseforge.com/api/maven"
     //}
+    maven {
+        name "CoFH Maven"
+        url "https://maven.covers1624.net"
+    }
 }
 
 processResources
